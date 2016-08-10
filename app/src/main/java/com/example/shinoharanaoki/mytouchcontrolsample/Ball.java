@@ -1,5 +1,7 @@
 package com.example.shinoharanaoki.mytouchcontrolsample;
 
+import android.graphics.Color;
+
 /**
  * Created by shinoharanaoki on 2016/08/10.
  */
@@ -12,10 +14,13 @@ public class Ball {
 
     public float radius;    // 円の半径    // (3)
 
-    public Ball(float x, float y, float r){
+    public int color;
+
+    public Ball(float x, float y, float r, int color){
         cx = x;
         cy = y;
         radius = r;
+        this.color = color;
     }
 
     public boolean checkTouch(float x, float y){

@@ -40,8 +40,9 @@ public class ThreeBallsView extends View{
         float radius = 50;
         float init_x = 100;
         float init_y = 100;
+        int color = Color.BLUE;
         for (int i=0;i<3;i++) {
-            balls[i] = new Ball(init_x, init_y, radius);
+            balls[i] = new Ball(init_x, init_y, radius, color);
             init_x += 100;
             init_y += 50;
         }
@@ -56,12 +57,17 @@ public class ThreeBallsView extends View{
             float ball_x = balls[i].cx;
             float ball_y = balls[i].cy;
             float radius = balls[i].radius;
+            paint.setColor(balls[i].color);
             canvas.drawCircle(ball_x, ball_y, radius, paint);  // (6)
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {    // (7)
+
+        touch_x = event.getX();    // (10)
+        touch_y = event.getY();    // (11)
+
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_DOWN:    // 指をタッチした    // (8)
@@ -69,14 +75,14 @@ public class ThreeBallsView extends View{
                 break;
 
             case MotionEvent.ACTION_MOVE:    // 指を動かしている    // (9)
-                touch_x = event.getX();    // (10)
-                touch_y = event.getY();    // (11)
 
                 for (int i=0;i<balls.length;i++) {
                     if(balls[i].checkTouch(touch_x,touch_y)){
                         Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
                         balls[i].cx = touch_x;
                         balls[i].cy = touch_y;
+                        balls[i].color = Color.RED;
+
                         break;
                     }
                 }
@@ -84,7 +90,10 @@ public class ThreeBallsView extends View{
                 break;
 
             case MotionEvent.ACTION_UP:        // 指を離した    // (12)
-                assert true;    // 何もしない
+                for (int i=0;i<balls.length;i++) {
+                    Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
+                    balls[i].color = Color.BLUE;
+                }
                 break;
 
             default:
