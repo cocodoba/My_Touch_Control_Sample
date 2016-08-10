@@ -19,7 +19,8 @@ public class ThreeBallsView extends View{
     private float touch_y;    // 画面のタッチされた Y 座標    // (2)
 
     private Canvas canvas;
-    private Paint paint;
+    private Paint paint_ball;
+    private Paint paint_ball_number;
 
     private Ball[] balls;
 
@@ -30,11 +31,14 @@ public class ThreeBallsView extends View{
 
     private void initialize() {
         // ペイントオブジェクトを設定する
-        paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(Color.BLUE);    // (4)
-        paint.setStyle(Paint.Style.FILL);    // (5)
+        paint_ball = new Paint();
+        paint_ball.setAntiAlias(true);
+        paint_ball.setColor(Color.BLUE);    // (4)
+        paint_ball.setStyle(Paint.Style.FILL);    // (5)
 
+        paint_ball_number = new Paint();
+        paint_ball_number.setAntiAlias(true);
+        paint_ball_number.setStyle(Paint.Style.FILL);    // (5)
 
         balls = new Ball[3];
         float radius = 50;
@@ -57,8 +61,15 @@ public class ThreeBallsView extends View{
             float ball_x = balls[i].cx;
             float ball_y = balls[i].cy;
             float radius = balls[i].radius;
-            paint.setColor(balls[i].color);
-            canvas.drawCircle(ball_x, ball_y, radius, paint);  // (6)
+            paint_ball.setColor(balls[i].color);
+            canvas.drawCircle(ball_x, ball_y, radius, paint_ball);  // (6)
+
+            //円の中に書く数字を描画する
+            float num_x = balls[i].cx;
+            float num_y = balls[i].cy +100;
+            paint_ball_number.setTextSize(30);
+            paint_ball_number.setColor(Color.BLUE);
+            canvas.drawText(String.valueOf(i), num_x, num_y, paint_ball_number);
         }
     }
 
