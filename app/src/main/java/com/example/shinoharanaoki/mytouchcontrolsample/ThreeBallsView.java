@@ -73,28 +73,60 @@ public class ThreeBallsView extends View{
         }
     }
 
+    boolean now_moving = false;
+    float down_x;
+    float down_y;
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {    // (7)
 
         touch_x = event.getX();    // (10)
         touch_y = event.getY();    // (11)
 
+
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_DOWN:    // 指をタッチした    // (8)
-                assert true;    // 何もしない
+                for (int i=0;i<balls.length;i++) {
+                    if(balls[i].checkTouch(touch_x,touch_y)){
+                        Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
+                        balls[i].color = Color.RED;
+
+                        down_x = touch_x;
+                        down_y = touch_y;
+
+                        now_moving = true;
+
+                        break;
+                    }
+                }
                 break;
 
             case MotionEvent.ACTION_MOVE:    // 指を動かしている    // (9)
 
-                for (int i=0;i<balls.length;i++) {
-                    if(balls[i].checkTouch(touch_x,touch_y)){
-                        Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
-                        balls[i].cx = touch_x;
-                        balls[i].cy = touch_y;
-                        balls[i].color = Color.RED;
+                if (now_moving) {
+                    for (int i=0;i<balls.length;i++) {
+                        if(balls[i].checkTouch(touch_x,touch_y)){
+                            Log.d(TAG, "onTouchEvent: Ball[" + i + "] is moving");
+                            if(down_x<=touch_x) {
+                                balls[i].cx += touch_x-down_x;
+                                down_x = balls[i].cx;
+                            }else {
+                                balls[i].cx -= down_x-touch_x;
+                                down_x = balls[i].cx;}
+                            if(down_y<=touch_y) {
+                                balls[i].cy += touch_y-down_y;
+                                down_y = balls[i].cy;
+                            }else {
+                                balls[i].cy -= down_y-touch_y;
+                                down_y = balls[i].cy;}
 
-                        break;
+                            balls[i].cy = touch_y;
+                            balls[i].color = Color.RED;
+
+                            now_moving = true;
+                        }
                     }
                 }
 
@@ -104,6 +136,8 @@ public class ThreeBallsView extends View{
                 for (int i=0;i<balls.length;i++) {
                     Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
                     balls[i].color = Color.BLUE;
+
+                    now_moving = false;
                 }
                 break;
 
