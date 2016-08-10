@@ -75,6 +75,9 @@ public class ThreeBallsView extends View{
                 for (int i=0;i<balls.length;i++) {
                     if(balls[i].checkTouch(touch_x,touch_y)){
                         Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
+                        balls[i].cx = touch_x;
+                        balls[i].cy = touch_y;
+                        break;
                     }
                 }
 
