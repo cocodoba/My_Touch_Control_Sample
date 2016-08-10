@@ -23,7 +23,7 @@ public class LoopingBalloonsView extends View {
     private Paint paint_ball_number;
 
     private Balloon[] balloons;
-    private int balloon_count = 10;
+    private int balloon_count = 20;
 
     public LoopingBalloonsView(Context context) {
         super(context);
@@ -65,10 +65,10 @@ public class LoopingBalloonsView extends View {
             canvas.drawCircle(ball_x, ball_y, radius, paint_ball);  // (6)
 
             //円の中に書く数字を描画する
-            float num_x = balloons[i].cx;
-            float num_y = balloons[i].cy +130;
+            float num_x = balloons[i].cx -5; //Stringは中心ではなく左端を起点に描画されるので微調整
+            float num_y = balloons[i].cy +5;
             paint_ball_number.setTextSize(30);
-            paint_ball_number.setColor(Color.BLUE);
+            paint_ball_number.setColor(Color.WHITE);
             canvas.drawText(String.valueOf(i), num_x, num_y, paint_ball_number);
         }
     }
