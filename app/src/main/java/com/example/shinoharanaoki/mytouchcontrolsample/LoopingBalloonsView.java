@@ -25,7 +25,7 @@ public class LoopingBalloonsView extends View {
     private Balloon[] balloons;
     private int balloon_count = 50;
 
-    private String[] iroha = {"い","ろ","は","に","ほ","へ","と","ち","り","ぬ","る","を"};
+    private String[] iroha = {"は","に","ほ","へ","と","い","ろ"};
     private int[] alignment_pattern = {5, 7};
 
     public LoopingBalloonsView(Context context) {
@@ -49,36 +49,48 @@ public class LoopingBalloonsView extends View {
 
         float radius = 50;
         float init_x = 100;
-        float init_y = 500;
-        float upper_y = 400;
-        float x_gap = 110;
+        float init_y = 435;
+        float upper_y = 350;
+        float x_gap = 105;
         int color = Color.BLUE;
-        boolean mode = true;
+        boolean pattern_c_to_e = true;
         int count = 0;
+        int n = 0;
+        String kana;
 
         float y = upper_y;
         for (int i=0;i<balloon_count;i++) {
             /**上下交互に並べる*/
             if (y != init_y) { /*下の段*/
                 y = init_y;
+                kana = iroha[n];
+                n++;
             } else { /*上の段*/
                 y = upper_y;
+                kana = "";
             }
             init_x += x_gap/2; //間隔
-            balloons[i] = new Balloon(init_x, y, radius, color);
+            balloons[i] = new Balloon(init_x, y, radius, color, kana);
             count++;
-            if(mode && count==5){
-                balloons[i] = new Balloon(init_x, y, radius, color);
+
+            if(pattern_c_to_e && count==alignment_pattern[0]){
+                /*下の段のパターンの最後*/
+                n--;
+                balloons[i] = new Balloon(init_x, y, radius, color, iroha[n]);
                 y = upper_y;
                 init_x +=x_gap/2;
-                mode = false;
+                pattern_c_to_e = false;
+                n++;
                 count=0;
             }
-            if(!mode && count==7){
-                balloons[i] = new Balloon(init_x, y, radius, color);
+            if(!pattern_c_to_e && count==alignment_pattern[1]){
+                /*下の段のパターンの最後*/
+                n--;
+                balloons[i] = new Balloon(init_x, y, radius, color, iroha[n]);
                 y = upper_y;
                 init_x +=x_gap/2;
-                mode = true;
+                pattern_c_to_e = true;
+                n =0;
                 count=0;
             }
         }
@@ -96,12 +108,18 @@ public class LoopingBalloonsView extends View {
             paint_ball.setColor(balloons[i].color);
             canvas.drawCircle(ball_x, ball_y, radius, paint_ball);  // (6)
 
-            //円の中に書く数字を描画する
-            float num_x = balloons[i].cx -5; //Stringは中心ではなく左端を起点に描画されるので微調整
-            float num_y = balloons[i].cy +5;
+            //円の下に書く数字を描画する
+            float num_x = balloons[i].cx -8; //Stringは中心ではなく左端を起点に描画されるので微調整
+            float num_y = balloons[i].cy +50;
             paint_ball_number.setTextSize(30);
-            paint_ball_number.setColor(Color.WHITE);
+            paint_ball_number.setColor(Color.BLUE);
             canvas.drawText(String.valueOf(i), num_x, num_y, paint_ball_number);
+
+            //円の中に書く文字を描画する
+            num_y = balloons[i].cy +8;
+            paint_ball_number.setTextSize(40);
+            paint_ball_number.setColor(Color.WHITE);
+            canvas.drawText(balloons[i].kana, num_x, num_y, paint_ball_number);
         }
     }
 

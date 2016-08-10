@@ -14,12 +14,14 @@ public class Balloon {
 
     public int color;
     public String kana;
+    public boolean upper_or_lower;
 
-    public Balloon(float x, float y, float r, int color){
+    public Balloon(float x, float y, float r, int color, String string){
         cx = x;
         cy = y;
         radius = r;
         this.color = color;
+        kana = string;
     }
 
     public boolean checkTouch(float x, float y){
