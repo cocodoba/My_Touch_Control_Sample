@@ -41,7 +41,7 @@ public class ThreeBallsView extends View{
         paint_ball_number.setStyle(Paint.Style.FILL);    // (5)
 
         balls = new Ball[3];
-        float radius = 50;
+        float radius = 100;
         float init_x = 100;
         float init_y = 100;
         int color = Color.BLUE;
@@ -111,16 +111,16 @@ public class ThreeBallsView extends View{
                             Log.d(TAG, "onTouchEvent: Ball[" + i + "] is moving");
                             if(down_x<=touch_x) {
                                 balls[i].cx += touch_x-down_x;
-                                down_x = balls[i].cx;
+                                down_x = touch_x;
                             }else {
                                 balls[i].cx -= down_x-touch_x;
-                                down_x = balls[i].cx;}
+                                down_x = touch_x;}
                             if(down_y<=touch_y) {
                                 balls[i].cy += touch_y-down_y;
-                                down_y = balls[i].cy;
+                                down_y = touch_y;
                             }else {
                                 balls[i].cy -= down_y-touch_y;
-                                down_y = balls[i].cy;}
+                                down_y = touch_y;}
 
                             balls[i].cy = touch_y;
                             balls[i].color = Color.RED;
