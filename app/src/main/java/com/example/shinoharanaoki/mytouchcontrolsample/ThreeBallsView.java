@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -70,6 +71,13 @@ public class ThreeBallsView extends View{
             case MotionEvent.ACTION_MOVE:    // 指を動かしている    // (9)
                 touch_x = event.getX();    // (10)
                 touch_y = event.getY();    // (11)
+
+                for (int i=0;i<balls.length;i++) {
+                    if(balls[i].checkTouch(touch_x,touch_y)){
+                        Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
+                    }
+                }
+
                 break;
 
             case MotionEvent.ACTION_UP:        // 指を離した    // (12)

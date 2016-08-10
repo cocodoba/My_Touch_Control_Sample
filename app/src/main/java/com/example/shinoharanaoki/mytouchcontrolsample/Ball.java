@@ -18,6 +18,10 @@ public class Ball {
         radius = r;
     }
 
-
+    public boolean checkTouch(float x, float y){
+        if((x<cx+radius&&x>cx-radius)&&(y<cy+radius&&y>cy-radius)){
+            return true;
+        }else{return false;}
+    }
 
 }
