@@ -23,8 +23,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TouchSampleActivity1"
-        android:onClick="onClickSample1"/>
+        android:text="ボールが3つ"
+        android:onClick="onClickSample3"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

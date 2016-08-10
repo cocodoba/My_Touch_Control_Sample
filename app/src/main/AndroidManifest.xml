@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MoveImageViewActivity" />
-        <activity android:name=".MoveBallObjectActivity"></activity>
+        <activity android:name=".MoveBallObjectActivity" />
+        <activity android:name=".ThreeBallsActivity"></activity>
     </application>
 
 </manifest>
