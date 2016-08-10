@@ -28,8 +28,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TouchSampleActivity1"
-        android:onClick="onClickSample1"/>
+        android:text="オブジェクトをぐるぐる回す"
+        android:onClick="onClickSample4"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

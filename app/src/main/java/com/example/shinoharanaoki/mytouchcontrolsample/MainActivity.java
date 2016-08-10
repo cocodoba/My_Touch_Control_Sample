@@ -34,4 +34,8 @@ public class MainActivity extends AppCompatActivity{
         startActivity(i);
     }
 
+    public void onClickSample4(View view) {
+        Intent i = new Intent(this, LoopingBalloonsActivity.class);
+        startActivity(i);
+    }
 }
