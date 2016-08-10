@@ -48,7 +48,7 @@ public class LoopingBalloonsView extends View {
         int color = Color.BLUE;
         for (int i=0;i<balloon_count;i++) {
             balloons[i] = new Balloon(init_x, init_y, radius, color);
-            init_x += 100;
+            init_x += 130; //間隔
         }
     }
 
@@ -105,25 +105,15 @@ public class LoopingBalloonsView extends View {
 
                 if (now_moving) {
                     for (int i=0;i<balloons.length;i++) {
-                        if(balloons[i].checkTouch(touch_x,touch_y)){
-                            Log.d(TAG, "onTouchEvent: Balloon[" + i + "] is moving");
+                        Log.d(TAG, "onTouchEvent: Balloon[" + i + "] is moving");
+                        for (int index=0;index<balloons.length;index++) {
                             if(down_x<=touch_x) {
-                                balloons[i].cx += touch_x-down_x;
-                                down_x = touch_x;
+                                balloons[index].cx += touch_x-down_x;
                             }else {
-                                balloons[i].cx -= down_x-touch_x;
-                                down_x = touch_x;}
-                            if(down_y<=touch_y) {
-                                balloons[i].cy += touch_y-down_y;
-                                down_y = touch_y;
-                            }else {
-                                balloons[i].cy -= down_y-touch_y;
-                                down_y = touch_y;}
-
-                            balloons[i].color = Color.RED;
-
-                            now_moving = true;
+                                balloons[index].cx -= down_x-touch_x;}
                         }
+                        down_x = touch_x;
+                        now_moving = true;
                     }
                 }
 
