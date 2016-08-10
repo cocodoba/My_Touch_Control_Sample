@@ -23,7 +23,10 @@ public class LoopingBalloonsView extends View {
     private Paint paint_ball_number;
 
     private Balloon[] balloons;
-    private int balloon_count = 20;
+    private int balloon_count = 50;
+
+    private String[] iroha = {"い","ろ","は","に","ほ","へ","と","ち","り","ぬ","る","を"};
+    private int[] alignment_pattern = {5, 7};
 
     public LoopingBalloonsView(Context context) {
         super(context);
@@ -42,13 +45,26 @@ public class LoopingBalloonsView extends View {
         paint_ball_number.setStyle(Paint.Style.FILL);    // (5)
 
         balloons = new Balloon[balloon_count];
+
+
         float radius = 50;
         float init_x = 100;
         float init_y = 500;
+        float upper_y = 400;
+        float x_gap = 120;
         int color = Color.BLUE;
+
+        float y = upper_y;
         for (int i=0;i<balloon_count;i++) {
-            balloons[i] = new Balloon(init_x, init_y, radius, color);
-            init_x += 130; //間隔
+            /**上下交互に並べる*/
+            if (y != init_y) { /*下の段*/
+                y = init_y;
+            } else { /*上の段*/
+                y = upper_y;
+            }
+            init_x += x_gap / 2; //間隔
+            balloons[i] = new Balloon(init_x, y, radius, color);
+
         }
     }
 

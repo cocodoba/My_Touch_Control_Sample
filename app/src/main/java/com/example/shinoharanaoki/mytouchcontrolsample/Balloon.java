@@ -13,6 +13,7 @@ public class Balloon {
     public float radius;    // 角の丸み    // (3)
 
     public int color;
+    public String kana;
 
     public Balloon(float x, float y, float r, int color){
         cx = x;
