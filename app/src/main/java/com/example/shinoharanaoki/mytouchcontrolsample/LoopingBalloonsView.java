@@ -51,8 +51,10 @@ public class LoopingBalloonsView extends View {
         float init_x = 100;
         float init_y = 500;
         float upper_y = 400;
-        float x_gap = 120;
+        float x_gap = 110;
         int color = Color.BLUE;
+        boolean mode = true;
+        int count = 0;
 
         float y = upper_y;
         for (int i=0;i<balloon_count;i++) {
@@ -62,9 +64,23 @@ public class LoopingBalloonsView extends View {
             } else { /*上の段*/
                 y = upper_y;
             }
-            init_x += x_gap / 2; //間隔
+            init_x += x_gap/2; //間隔
             balloons[i] = new Balloon(init_x, y, radius, color);
-
+            count++;
+            if(mode && count==5){
+                balloons[i] = new Balloon(init_x, y, radius, color);
+                y = upper_y;
+                init_x +=x_gap/2;
+                mode = false;
+                count=0;
+            }
+            if(!mode && count==7){
+                balloons[i] = new Balloon(init_x, y, radius, color);
+                y = upper_y;
+                init_x +=x_gap/2;
+                mode = true;
+                count=0;
+            }
         }
     }
 
