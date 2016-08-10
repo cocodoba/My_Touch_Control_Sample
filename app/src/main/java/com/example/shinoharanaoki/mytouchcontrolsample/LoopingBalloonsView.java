@@ -121,10 +121,9 @@ public class LoopingBalloonsView extends View {
 
             case MotionEvent.ACTION_UP:        // 指を離した    // (12)
                 for (int i=0;i<balloons.length;i++) {
+                    balloons[i].color = Color.BLUE;
                     if (balloons[i].checkTouch(touch_x,touch_y)) {
                         Log.d(TAG, "onTouchEvent: Balloon[" + i + "] is released");
-                        balloons[i].color = Color.BLUE;
-
                         now_moving = false;
                     }
                 }
