@@ -122,7 +122,6 @@ public class ThreeBallsView extends View{
                                 balls[i].cy -= down_y-touch_y;
                                 down_y = touch_y;}
 
-                            balls[i].cy = touch_y;
                             balls[i].color = Color.RED;
 
                             now_moving = true;
