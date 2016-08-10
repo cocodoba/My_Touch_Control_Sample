@@ -66,7 +66,7 @@ public class ThreeBallsView extends View{
 
             //円の中に書く数字を描画する
             float num_x = balls[i].cx;
-            float num_y = balls[i].cy +100;
+            float num_y = balls[i].cy +130;
             paint_ball_number.setTextSize(30);
             paint_ball_number.setColor(Color.BLUE);
             canvas.drawText(String.valueOf(i), num_x, num_y, paint_ball_number);
@@ -84,18 +84,16 @@ public class ThreeBallsView extends View{
         touch_x = event.getX();    // (10)
         touch_y = event.getY();    // (11)
 
-
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_DOWN:    // 指をタッチした    // (8)
                 for (int i=0;i<balls.length;i++) {
                     if(balls[i].checkTouch(touch_x,touch_y)){
                         Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
-                        balls[i].color = Color.RED;
+                        balls[i].color = Color.YELLOW;
 
                         down_x = touch_x;
                         down_y = touch_y;
-
                         now_moving = true;
 
                         break;
@@ -133,10 +131,12 @@ public class ThreeBallsView extends View{
 
             case MotionEvent.ACTION_UP:        // 指を離した    // (12)
                 for (int i=0;i<balls.length;i++) {
-                    Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
-                    balls[i].color = Color.BLUE;
+                    if (balls[i].checkTouch(touch_x,touch_y)) {
+                        Log.d(TAG, "onTouchEvent: Ball[" + i + "] is released");
+                        balls[i].color = Color.BLUE;
 
-                    now_moving = false;
+                        now_moving = false;
+                    }
                 }
                 break;
 
