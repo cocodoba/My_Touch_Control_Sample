@@ -18,7 +18,8 @@
         <activity android:name=".MoveImageViewActivity" />
         <activity android:name=".MoveBallObjectActivity" />
         <activity android:name=".ThreeBallsActivity" />
-        <activity android:name=".LoopingBalloonsActivity"></activity>
+        <activity android:name=".LoopingBalloonsActivity" />
+        <activity android:name=".FlashBallsActivity"></activity>
     </application>
 
 </manifest>

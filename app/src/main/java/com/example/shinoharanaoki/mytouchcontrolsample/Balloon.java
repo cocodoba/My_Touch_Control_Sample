@@ -1,5 +1,7 @@
 package com.example.shinoharanaoki.mytouchcontrolsample;
 
+import android.util.Log;
+
 /**
  * Created by shinoharanaoki on 2016/08/10.
  */
@@ -14,7 +16,10 @@ public class Balloon {
 
     public int color;
     public String kana;
+    public int twelve_num;
+    public int hight;
     public boolean upper_or_lower;
+    public static int index = 1;
 
     public Balloon(float x, float y, float r, int color, String string){
         cx = x;
@@ -22,6 +27,9 @@ public class Balloon {
         radius = r;
         this.color = color;
         kana = string;
+
+        Log.d(TAG, "Balloon: " + index + "個目");
+        index++;
     }
 
     public boolean checkTouch(float x, float y){
@@ -29,4 +37,5 @@ public class Balloon {
             return true;
         }else{return false;}
     }
+
 }
