@@ -38,4 +38,9 @@ public class MainActivity extends AppCompatActivity{
         Intent i = new Intent(this, LoopingBalloonsActivity.class);
         startActivity(i);
     }
+
+    public void onClickSample5(View view) {
+        Intent i = new Intent(this, FlashBallsActivity.class);
+        startActivity(i);
+    }
 }
