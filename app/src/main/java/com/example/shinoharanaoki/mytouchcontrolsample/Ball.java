@@ -15,12 +15,16 @@ public class Ball {
     public float radius;    // 円の半径    // (3)
 
     public int color;
+    public int ball_number;
+    public static int index = 1;
 
     public Ball(float x, float y, float r, int color){
         cx = x;
         cy = y;
         radius = r;
         this.color = color;
+        ball_number=index;
+        index++;
     }
 
     public boolean checkTouch(float x, float y){

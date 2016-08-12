@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +28,9 @@ public class FlashBallsView extends View {
     boolean isThreadRunning = false;
 
     private  int number_of_balls = 5;
+
+    private int[][] selects = {{1,3,5},{2,4},{4,5,1}};
+    private int[] intervals = {800,600,1800};
 
     public FlashBallsView(Context context){
         super(context);
@@ -59,33 +61,40 @@ public class FlashBallsView extends View {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-
+                Log.d(TAG, "run: \"Thread Start!!\"");
+                int term = 0;
                 while (isThreadRunning) {
-                    for(int i=0;i<balls.length;i++) {
-                        balls[i].color = Color.WHITE;
-                        /**画面を更新する
-                         *
-                         * UIスレッドではないほかのスレッドから画面を更新させたい場合は、
-                         * invalidate()ではなく、postInvalidate()を利用する
-                         * */
-                        postInvalidate();
+                    /*いったんすべてのボールの色を元に戻す*/
+                    for (int i = 0; i < balls.length; i++) {
+                        balls[i].color = Color.BLUE;
                     }
+                    postInvalidate();
+
+                    for (int num : selects[term]) {
+                        for (int i = 0; i < balls.length; i++) {
+                            if (balls[i].ball_number == num) {
+                                balls[i].color = Color.RED;
+                            }
+                        }
+                    }
+                    /**画面を更新する
+                     *
+                     * UIスレッドではないほかのスレッドから画面を更新させたい場合は、
+                     * invalidate()ではなく、postInvalidate()を利用する
+                     * */
+                    postInvalidate();
+
+                    /*次の更新までの間隔を設ける*/
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(intervals[term]);
                     }catch (InterruptedException e){
                         Log.e(TAG, "run:InterruptedException", e );
                     }
-                    for(int i=0;i<balls.length;i++) {
-                        balls[i].color = Color.BLUE;
-                        /**画面を更新する*/
-                        postInvalidate();
-                    }
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        Log.e(TAG, "run:InterruptedException", e );
-                    }
 
+                    term++;
+                    if(term ==selects.length){
+                        term =0;
+                    }
                     Log.d(TAG, "run: \"Thread Running!!\"");
                 }
             }
