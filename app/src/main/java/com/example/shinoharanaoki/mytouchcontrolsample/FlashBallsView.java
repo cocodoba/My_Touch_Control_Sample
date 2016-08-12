@@ -1,9 +1,13 @@
 package com.example.shinoharanaoki.mytouchcontrolsample;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
+import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +19,8 @@ public class FlashBallsView extends View {
     private static final String TAG = FlashBallsView.class.getSimpleName();
     private final FlashBallsView self = this;
 
+    private Context context;
+
     private float touch_x;    // 画面のタッチされた X 座標    // (1)
     private float touch_y;    // 画面のタッチされた Y 座標    // (2)
 
@@ -22,21 +28,31 @@ public class FlashBallsView extends View {
     private Paint paint_ball;
     private Paint paint_ball_number;
 
+    private AudioAttributes audioAttributes;
+    private SoundPool soundPool;
+    private int soundC4;
+    private int soundD4;
+    private int soundE4;
+    private int soundF4;
+    private int soundG4;
+
     private Ball[] balls;
 
-    Thread thread;
+    private Thread thread;
     boolean isThreadRunning = false;
 
     private  int number_of_balls = 5;
 
-    private int[][] selects = {{1,3,5},{2,4},{4,5,1}};
+    private int[][] selects = {{1,3},{2,4},{4,5,1}};
     private int[] intervals = {800,600,1800};
 
     public FlashBallsView(Context context){
         super(context);
+        this.context = context;
         initialize();
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void initialize() {
         // ペイントオブジェクトを設定する
         paint_ball = new Paint();
@@ -58,6 +74,30 @@ public class FlashBallsView extends View {
             init_x += 140;
         }
 
+        audioAttributes = new AudioAttributes.Builder()
+                // USAGE_MEDIA
+                // USAGE_GAME
+                .setUsage(AudioAttributes.USAGE_GAME)
+                // CONTENT_TYPE_MUSIC
+                // CONTENT_TYPE_SPEECH, etc.
+                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                .build();
+
+        soundPool = new SoundPool.Builder()
+                .setAudioAttributes(audioAttributes)
+                // ストリーム数に応じて(同時に鳴らせる音の数)
+                .setMaxStreams(5)
+                .build();
+
+        // wav をロードしておく
+        soundC4 = soundPool.load(context, R.raw.c4, 1);
+        soundD4 = soundPool.load(context, R.raw.d4, 1);
+        soundE4 = soundPool.load(context, R.raw.e4, 1);
+        soundF4 = soundPool.load(context, R.raw.f4, 1);
+        soundG4 = soundPool.load(context, R.raw.g4, 1);
+
+        final int[] sounds = {soundC4,soundD4,soundE4,soundF4,soundG4};
+
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -74,6 +114,8 @@ public class FlashBallsView extends View {
                         for (int i = 0; i < balls.length; i++) {
                             if (balls[i].ball_number == num) {
                                 balls[i].color = Color.RED;
+                                // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
+                                soundPool.play(sounds[i], 1.0f, 1.0f, 0, 0, 1);
                             }
                         }
                     }
@@ -135,6 +177,8 @@ public class FlashBallsView extends View {
         touch_x = event.getX();    // (10)
         touch_y = event.getY();    // (11)
 
+        final int[] sounds = {soundC4,soundD4,soundE4,soundF4,soundG4};
+
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_DOWN:    // 指をタッチした    // (8)
@@ -142,6 +186,7 @@ public class FlashBallsView extends View {
                     if(balls[i].checkTouch(touch_x,touch_y)){
                         Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
                         balls[i].color = Color.YELLOW;
+                        soundPool.play(sounds[i], 1.0f, 1.0f, 0, 0, 1);
 
                         down_x = touch_x;
                         down_y = touch_y;
