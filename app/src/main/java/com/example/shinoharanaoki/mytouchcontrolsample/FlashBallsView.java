@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +24,9 @@ public class FlashBallsView extends View {
     private Paint paint_ball_number;
 
     private Ball[] balls;
+
+    Thread thread;
+    boolean isThreadRunning = false;
 
     private  int number_of_balls = 5;
 
@@ -51,6 +55,43 @@ public class FlashBallsView extends View {
             balls[i] = new Ball(init_x, init_y, radius, color);
             init_x += 140;
         }
+
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (isThreadRunning) {
+                    for(int i=0;i<balls.length;i++) {
+                        balls[i].color = Color.WHITE;
+                        /**画面を更新する
+                         *
+                         * UIスレッドではないほかのスレッドから画面を更新させたい場合は、
+                         * invalidate()ではなく、postInvalidate()を利用する
+                         * */
+                        postInvalidate();
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    }catch (InterruptedException e){
+                        Log.e(TAG, "run:InterruptedException", e );
+                    }
+                    for(int i=0;i<balls.length;i++) {
+                        balls[i].color = Color.BLUE;
+                        /**画面を更新する*/
+                        postInvalidate();
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Log.e(TAG, "run:InterruptedException", e );
+                    }
+
+                    Log.d(TAG, "run: \"Thread Running!!\"");
+                }
+            }
+        });
+        isThreadRunning = true;
+        thread.start();
     }
 
     @Override
@@ -124,6 +165,11 @@ public class FlashBallsView extends View {
                 break;
         }
 
+        /**画面を更新する
+         *
+         * View # invalidate()は，メインスレッドがアイドル状態になり次第、
+         * ビューがonDraw()経由で再描画されるように，システムにお願いする
+         * */
         invalidate();    // (13)
 
         return true;    // (14)
