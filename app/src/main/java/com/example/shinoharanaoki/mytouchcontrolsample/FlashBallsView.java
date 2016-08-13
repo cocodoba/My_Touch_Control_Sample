@@ -80,7 +80,7 @@ public class FlashBallsView extends View {
                 .setUsage(AudioAttributes.USAGE_GAME)
                 // CONTENT_TYPE_MUSIC
                 // CONTENT_TYPE_SPEECH, etc.
-                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build();
 
         soundPool = new SoundPool.Builder()
