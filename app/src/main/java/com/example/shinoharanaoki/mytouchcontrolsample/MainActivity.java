@@ -43,4 +43,9 @@ public class MainActivity extends AppCompatActivity{
         Intent i = new Intent(this, FlashBallsActivity.class);
         startActivity(i);
     }
+
+    public void onClickSample6(View view) {
+        Intent i = new Intent(this, ChordBoardActivity.class);
+        startActivity(i);
+    }
 }
