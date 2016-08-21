@@ -3,12 +3,9 @@ package com.example.shinoharanaoki.mytouchcontrolsample;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+
+import com.example.shinoharanaoki.mytouchcontrolsample.chord_activity.ChordBoardActivity;
 
 public class MainActivity extends AppCompatActivity{
 

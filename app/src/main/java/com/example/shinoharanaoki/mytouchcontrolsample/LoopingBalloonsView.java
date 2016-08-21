@@ -25,6 +25,11 @@ public class LoopingBalloonsView extends View {
     private Balloon[] balloons;
     private int balloon_count = 50;
 
+    private Thread thread;
+    boolean isThreadRunning = false;
+    private int[][] selects = {{1,3},{2,4},{4,5,1}};
+    private int[] intervals = {800,600,1800};
+
     private String[] iroha = {"は","に","ほ","へ","と","い","ろ"};
     private int[] alignment_pattern = {5, 7};
 
@@ -46,14 +51,14 @@ public class LoopingBalloonsView extends View {
 
         balloons = new Balloon[balloon_count];
 
-        /**C1,D1,E1 ... と順番に生成する(後で使う)*/
+        /**c1,d1,e1 ... と順番に生成する(後で使う)*/
         /*char alphabet = 'C';
-        int hight = 2;
+        int octave_hight = 2;
         for (int i=0;i<balloon_count;i++) {
-            mIDs[i] = ""+ alphabet + hight;
+            mIDs[i] = ""+ alphabet + octave_hight;
             alphabet++;
             if(alphabet=='C'){
-                hight++;
+                octave_hight++;
             }
             if(alphabet=='H'){
                 alphabet='A';
@@ -123,9 +128,55 @@ public class LoopingBalloonsView extends View {
                 num = 1;
                 hight++;
             }
-            Log.i(TAG, "initialize: baloons["+i+"] ... hight= "+balloons[i].hight + "  " +
+            Log.i(TAG, "initialize: baloons["+i+"] ... octave_hight= "+balloons[i].hight + "  " +
                     "  twelve_num="+ balloons[i].twelve_num);
         }
+
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "run: \"Thread Start!!\"");
+                int term = 0;
+                while (isThreadRunning) {
+                    /*いったんすべてのボールの色を元に戻す*/
+                    for (int i = 0; i < balloons.length; i++) {
+                        balloons[i].color = Color.BLUE;
+                    }
+                    postInvalidate();
+
+                    for (int num : selects[term]) {
+                        for (int i = 0; i < balloons.length; i++) {
+                            if (balloons[i].twelve_num == num) {
+                                balloons[i].color = Color.RED;
+                                // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
+                                //soundPool.play(sounds[i], 1.0f, 1.0f, 0, 0, 1);
+                            }
+                        }
+                    }
+                    /**画面を更新する
+                     *
+                     * UIスレッドではないほかのスレッドから画面を更新させたい場合は、
+                     * invalidate()ではなく、postInvalidate()を利用する
+                     * */
+                    postInvalidate();
+
+                    /*次の更新までの間隔を設ける*/
+                    try {
+                        Thread.sleep(intervals[term]);
+                    }catch (InterruptedException e){
+                        Log.e(TAG, "run:InterruptedException", e );
+                    }
+
+                    term++;
+                    if(term ==selects.length){
+                        term =0;
+                    }
+                    Log.d(TAG, "run: \"Thread Running!!\"");
+                }
+            }
+        });
+        isThreadRunning = true;
+        thread.start();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.shinoharanaoki.mytouchcontrolsample;
 
 import android.graphics.Color;
+import android.util.Log;
 
 /**
  * Created by shinoharanaoki on 2016/08/10.
@@ -17,6 +18,7 @@ public class Ball {
     public int color;
     public int ball_number;
     public static int index = 1;
+    String kana;
 
     public Ball(float x, float y, float r, int color){
         cx = x;
@@ -26,6 +28,18 @@ public class Ball {
         ball_number=index;
         index++;
     }
+
+    public Ball(float x, float y, float r, int color, String string){
+        cx = x;
+        cy = y;
+        radius = r;
+        this.color = color;
+        kana = string;
+
+        Log.d(TAG, "Balloon: " + index + "個目");
+        index++;
+    }
+
 
     public boolean checkTouch(float x, float y){
         if((x<cx+radius&&x>cx-radius)&&(y<cy+radius&&y>cy-radius)){

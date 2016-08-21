@@ -20,7 +20,8 @@
         <activity android:name=".ThreeBallsActivity" />
         <activity android:name=".LoopingBalloonsActivity" />
         <activity android:name=".FlashBallsActivity" />
-        <activity android:name=".ChordBoardActivity"/>
+        <activity android:name=".chord_activity.ChordBoardActivity"
+                  android:screenOrientation="landscape"/>
     </application>
 
 </manifest>
