@@ -31,10 +31,12 @@ public class ChordBoardActivity extends AppCompatActivity {
         final ArrayAdapter<CharSequence> root_absolute_adapter =
                 ArrayAdapter.createFromResource(this, R.array.root_absolute_array,
                         android.R.layout.simple_spinner_item);
+        root_absolute_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         final ArrayAdapter<CharSequence> root_relative_adapter =
                 ArrayAdapter.createFromResource(this, R.array.root_relative_array,
                         android.R.layout.simple_spinner_item);
+        root_relative_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         key_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -46,8 +48,6 @@ public class ChordBoardActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Spinner spinner = (Spinner) parent;
                 if(spinner.getSelectedItemPosition()==0){
-
-                    root_absolute_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     root_select_spinner.setAdapter(root_absolute_adapter);
                     root_select_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
@@ -60,8 +60,6 @@ public class ChordBoardActivity extends AppCompatActivity {
                         }
                     });
                 }else{
-
-                    root_relative_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     root_select_spinner.setAdapter(root_relative_adapter);
                     root_select_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
