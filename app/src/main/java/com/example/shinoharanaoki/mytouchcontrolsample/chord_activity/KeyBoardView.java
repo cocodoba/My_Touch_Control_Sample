@@ -180,8 +180,8 @@ public class KeyBoardView extends View{
 
         float radius = 50;
         float init_x = 100;
-        float init_y = 285;
-        float upper_y = 200;
+        float init_y = 185;
+        float upper_y = 100;
         float x_gap = 105;
         int color = Color.BLUE;
         boolean pattern_CtoE = true;

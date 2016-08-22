@@ -1,3 +1,114 @@
 <resources>
     <string name="app_name">My Touch Control Sample</string>
+
+    <string-array name="sample_array">
+        <item>Sample0</item>
+        <item>Sample1</item>
+        <item>Sample2</item>
+        <item>Sample3</item>
+        <item>Sample4</item>
+    </string-array>
+
+    <string-array name="key_array">
+        <item>-No Key Select-</item>
+        <item>C</item>
+        <item>C♯</item>
+        <item>D</item>
+        <item>D♭</item>
+        <item>D♯</item>
+        <item>E</item>
+        <item>E♭</item>
+        <item>F</item>
+        <item>F♯</item>
+        <item>G</item>
+        <item>G♭</item>
+        <item>G♯</item>
+        <item>A</item>
+        <item>A♭</item>
+        <item>A♯</item>
+        <item>B</item>
+        <item>B♭</item>
+    </string-array>
+
+    <string-array name="root_absolute_array">
+        <item>C</item>
+        <item>C♭</item>
+        <item>C♯</item>
+        <item>D</item>
+        <item>D♭</item>
+        <item>D♯</item>
+        <item>E</item>
+        <item>E♭</item>
+        <item>E♯</item>
+        <item>F</item>
+        <item>F♭</item>
+        <item>F♯</item>
+        <item>G</item>
+        <item>G♭</item>
+        <item>G♯</item>
+        <item>A</item>
+        <item>A♭</item>
+        <item>A♯</item>
+        <item>B</item>
+        <item>B♭</item>
+        <item>B♯</item>
+    </string-array>
+
+    <string-array name="root_relative_array">
+        <item>I</item>
+        <item>I♭</item>
+        <item>I♯</item>
+        <item>II</item>
+        <item>II♭</item>
+        <item>II♯</item>
+        <item>III</item>
+        <item>III♭</item>
+        <item>III♯</item>
+        <item>IV</item>
+        <item>IV♭</item>
+        <item>IV♯</item>
+        <item>V</item>
+        <item>V♭</item>
+        <item>V♯</item>
+        <item>VI</item>
+        <item>VI♭</item>
+        <item>VI♯</item>
+        <item>VII</item>
+        <item>VII♭</item>
+        <item>VII♯</item>
+    </string-array>
+
+    <string-array name="chord_structure_array">
+        <item>Major</item>
+        <item>6</item>
+        <item>M7</item>
+        <item>7</item>
+        <item>9</item>
+        <item>add9</item>
+        <item>Minor</item>
+        <item>m6</item>
+        <item>mM7</item>
+        <item>m7</item>
+        <item>m9</item>
+        <item>Diminished</item>
+        <item>Augumented</item>
+        <item>sus4</item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+
 </resources>
