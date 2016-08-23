@@ -21,7 +21,7 @@
     <com.example.shinoharanaoki.mytouchcontrolsample.chord_activity.KeyBoardView
         android:layout_width="wrap_content"
         android:layout_height="150dp"
-        android:id="@+id/view"
+        android:id="@+id/keyboard_view"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

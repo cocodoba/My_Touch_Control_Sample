@@ -18,10 +18,15 @@ public class ChordBoardActivity extends AppCompatActivity {
     private Spinner chord_structure_select_spinner;
     private EditText term_length_imput;
 
+    private KeyBoardView keyboard_view;
+    private boolean isThreadRunning = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chord_board);
+
+        keyboard_view = (KeyBoardView) findViewById(R.id.keyboard_view);
 
         // Spinnerの設定
         final ArrayAdapter<CharSequence> key_adapter =
@@ -128,6 +133,14 @@ public class ChordBoardActivity extends AppCompatActivity {
         threadButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (!isThreadRunning) {
+                    isThreadRunning = true;
+                    keyboard_view.startThread();
+                } else{
+                    isThreadRunning = false;
+                    keyboard_view.endThread();
+                }
             }
         });
     }

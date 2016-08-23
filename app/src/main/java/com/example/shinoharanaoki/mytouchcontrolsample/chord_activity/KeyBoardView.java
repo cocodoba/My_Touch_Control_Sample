@@ -18,7 +18,7 @@ import com.example.shinoharanaoki.mytouchcontrolsample.R;
 /**
  * Created by shinoharanaoki on 2016/08/13.
  */
-public class KeyBoardView extends View{
+public class KeyBoardView extends View implements Runnable{
     private static final String TAG = KeyBoardView.class.getSimpleName();
     private final KeyBoardView self = this;
 
@@ -288,114 +288,6 @@ public class KeyBoardView extends View{
 
         // wav をロードしておく
         sounds = setSoundPool();
-
-        thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "run: \"Thread Start!!\"");
-                int now_progress = 0;
-                while (isThreadRunning) {
-                    /*いったんすべてのボールの色を元に戻す*/
-                    for (int position = 0; position < keyboard.length; position++) {
-                        keyboard[position].color = Color.BLUE;
-                    }
-                    postInvalidate();
-
-                    /** コード表示1. シーケンスから次に表示する「コード+時間」を取り出す*/
-                    ChordTerm chord_term = chord_sequence[now_progress];
-                    /** コード表示2. 「コード+時間」からコードを取り出す*/
-                    Chord chord = chord_term.getChord();
-                    Log.d(TAG, "run: chord_root =" +chord.getRoot());
-                    for (int position = 0; position < keyboard.length; position++) {
-                        /**コード表示3. 現在のコードルートに応じて、キーボードにルートからのポジション番号と、文字表示用のインジケータを割り振る*/
-                        keyboard[position].position_from_root = chord.getPositionFromRoot(keyboard[position].absolute_note_name);
-                        /**コード表示4. コードにディミニッシュかオーギュメンテッドのフラグがあれば、該当する鍵盤のインジケータを変更する*/
-                        //keyboard[i].setflags(chord);
-                    }
-
-                    /** コード表示5-(A). コードからコードトーンを度数の形で出力する(キーボード全体に表示するため)*/
-                    int[] chord_tones = chord.getChordTriad();
-                    Log.d(TAG, "run: chord_intervals = " + chord_tones[0]+chord_tones[1]+chord_tones[2]);
-                    /** コード表示5-(B). コードからコードトーンを確定音名の形で、高さ、転回等指定したうえで出力する(実際に鳴らすため)*/
-                    int[] chord_sounds = chord.generateChordSounds();
-                    /** コード表示6. ルートからのポジション番号と、コードトーンの度数が一致するものを照合する(キーボード全体)*/
-                    for (int chord_tone : chord_tones) {
-                        for (int position = 0; position < keyboard.length; position++) {
-                            if (keyboard[position].position_from_root == chord_tone) {
-                                keyboard[position].color = Color.RED;
-                            }
-                        }
-                    }
-                    /** コード表示7-(A). キーボードのポジション番号と、コードサウンド配列の数字が一致するものを照合して音を鳴らす*/
-                    for (int chord_sound : chord_sounds) {
-                        for (int position = 0; position < keyboard.length; position++) {
-                            if (keyboard[position].position == chord_sound) {
-                                keyboard[position].color = Color.YELLOW;
-                                // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
-                                soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
-                            }
-                        }
-                    }
-
-                    /** コード表示7-(B). キーボードのポジション番号と、6thノートの数字が一致するものを照合して音を鳴らす*/
-                    if (chord.getSixth()!=OMITTED) {
-                        for (int position = 0; position < keyboard.length; position++) {
-                            if (keyboard[position].position == chord.getSixth()) {
-                                keyboard[position].color = Color.CYAN;
-                                // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
-                                soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
-                            }
-                        }
-                    }
-
-                    /** コード表示7-(C). キーボードのポジション番号と、セブンスノートの数字が一致するものを照合して音を鳴らす*/
-                    if (chord.getSeventh()!=OMITTED) {
-                        for (int position = 0; position < keyboard.length; position++) {
-                            if (keyboard[position].position == chord.getSeventh()) {
-                                keyboard[position].color = Color.CYAN;
-                                // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
-                                soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
-                            }
-                        }
-                    }
-
-                    /** コード表示7-(C). キーボードのポジション番号と、テンションノート配列の数字が一致するものを照合して音を鳴らす*/
-                    if (chord.getTensions()!=null) {
-                        for (int position = 0; position < keyboard.length; position++) {
-                            for (int tension_note : chord.getTensions()) {
-                                if (keyboard[position].position == tension_note) {
-                                    keyboard[position].color = Color.MAGENTA;
-                                    // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
-                                    soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
-                                }
-                            }
-                        }
-                    }
-
-                    /**画面を更新する
-                     *
-                     * UIスレッドではないほかのスレッドから画面を更新させたい場合は、
-                     * invalidate()ではなく、postInvalidate()を利用する
-                     * */
-                    postInvalidate();
-
-                    /*次の更新までの間隔を設ける*/
-                    try {
-                        Thread.sleep(chord_term.getTerm());
-                    }catch (InterruptedException e){
-                        Log.e(TAG, "run:InterruptedException", e );
-                    }
-
-                    now_progress++;
-                    if(now_progress ==chord_sequence.length){
-                        now_progress =0;
-                    }
-                    Log.d(TAG, "run: \"Thread Running!!\"");
-                }
-            }
-        });
-        isThreadRunning = true;
-        thread.start();
     }
 
     @Override
@@ -435,6 +327,126 @@ public class KeyBoardView extends View{
             paint_ball_number.setTextSize(40);
             paint_ball_number.setColor(Color.BLUE);
             canvas.drawText(keyboard[position].kana, num_x, num_y, paint_ball_number);
+        }
+    }
+
+    @Override
+    public void run() {
+        Log.d(TAG, "run: \"Thread Start!!\"");
+        int now_progress = 0;
+        while (isThreadRunning) {
+                    /*いったんすべてのボールの色を元に戻す*/
+            for (int position = 0; position < keyboard.length; position++) {
+                keyboard[position].color = Color.BLUE;
+            }
+            postInvalidate();
+
+            /** コード表示1. シーケンスから次に表示する「コード+時間」を取り出す*/
+            ChordTerm chord_term = chord_sequence[now_progress];
+            /** コード表示2. 「コード+時間」からコードを取り出す*/
+            Chord chord = chord_term.getChord();
+            Log.d(TAG, "run: chord_root =" +chord.getRoot());
+            for (int position = 0; position < keyboard.length; position++) {
+                /**コード表示3. 現在のコードルートに応じて、キーボードにルートからのポジション番号と、文字表示用のインジケータを割り振る*/
+                keyboard[position].position_from_root = chord.getPositionFromRoot(keyboard[position].absolute_note_name);
+                /**コード表示4. コードにディミニッシュかオーギュメンテッドのフラグがあれば、該当する鍵盤のインジケータを変更する*/
+                //keyboard[i].setflags(chord);
+            }
+
+            /** コード表示5-(A). コードからコードトーンを度数の形で出力する(キーボード全体に表示するため)*/
+            int[] chord_tones = chord.getChordTriad();
+            Log.d(TAG, "run: chord_intervals = " + chord_tones[0]+chord_tones[1]+chord_tones[2]);
+            /** コード表示5-(B). コードからコードトーンを確定音名の形で、高さ、転回等指定したうえで出力する(実際に鳴らすため)*/
+            int[] chord_sounds = chord.generateChordSounds();
+            /** コード表示6. ルートからのポジション番号と、コードトーンの度数が一致するものを照合する(キーボード全体)*/
+            for (int chord_tone : chord_tones) {
+                for (int position = 0; position < keyboard.length; position++) {
+                    if (keyboard[position].position_from_root == chord_tone) {
+                        keyboard[position].color = Color.RED;
+                    }
+                }
+            }
+            /** コード表示7-(A). キーボードのポジション番号と、コードサウンド配列の数字が一致するものを照合して音を鳴らす*/
+            for (int chord_sound : chord_sounds) {
+                for (int position = 0; position < keyboard.length; position++) {
+                    if (keyboard[position].position == chord_sound) {
+                        keyboard[position].color = Color.YELLOW;
+                        // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
+                        soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
+                    }
+                }
+            }
+
+            /** コード表示7-(B). キーボードのポジション番号と、6thノートの数字が一致するものを照合して音を鳴らす*/
+            if (chord.getSixth()!=OMITTED) {
+                for (int position = 0; position < keyboard.length; position++) {
+                    if (keyboard[position].position == chord.getSixth()) {
+                        keyboard[position].color = Color.CYAN;
+                        // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
+                        soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
+                    }
+                }
+            }
+
+            /** コード表示7-(C). キーボードのポジション番号と、セブンスノートの数字が一致するものを照合して音を鳴らす*/
+            if (chord.getSeventh()!=OMITTED) {
+                for (int position = 0; position < keyboard.length; position++) {
+                    if (keyboard[position].position == chord.getSeventh()) {
+                        keyboard[position].color = Color.CYAN;
+                        // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
+                        soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
+                    }
+                }
+            }
+
+            /** コード表示7-(C). キーボードのポジション番号と、テンションノート配列の数字が一致するものを照合して音を鳴らす*/
+            if (chord.getTensions()!=null) {
+                for (int position = 0; position < keyboard.length; position++) {
+                    for (int tension_note : chord.getTensions()) {
+                        if (keyboard[position].position == tension_note) {
+                            keyboard[position].color = Color.MAGENTA;
+                            // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
+                            soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
+                        }
+                    }
+                }
+            }
+
+            /**画面を更新する
+             *
+             * UIスレッドではないほかのスレッドから画面を更新させたい場合は、
+             * invalidate()ではなく、postInvalidate()を利用する
+             * */
+            postInvalidate();
+
+                    /*次の更新までの間隔を設ける*/
+            try {
+                Thread.sleep(chord_term.getTerm());
+            }catch (InterruptedException e){
+                Log.e(TAG, "run:InterruptedException", e );
+            }
+
+            now_progress++;
+            if(now_progress ==chord_sequence.length){
+                now_progress =0;
+            }
+            Log.d(TAG, "run: \"Thread Running!!\"");
+        }
+    }
+
+    public void startThread(){
+        if (!isThreadRunning) {
+            thread = new Thread(this);
+            isThreadRunning = true;
+            thread.start();
+            Log.d(TAG, "startThread: ");
+        }
+    }
+
+    public void endThread(){
+        if (isThreadRunning) {
+            isThreadRunning = false;
+            Log.d(TAG, "endThread: ");
         }
     }
 
