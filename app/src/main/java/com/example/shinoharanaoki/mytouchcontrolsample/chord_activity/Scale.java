@@ -137,7 +137,7 @@ public class Scale {
         return scale_degree;
     }
 
-    public static int[] getScale(){
+    public static int[] getScale(){ //TODO パラメータ: major.minor...
         int[] major_scale = {0,2,4,5,7,9,11};
         return major_scale;
     }

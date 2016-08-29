@@ -112,35 +112,14 @@ public class KeyBoardView extends View implements Runnable{
     private SoundPool soundPool;
     private int[] sounds;
 
-    //TEST
-    public static final int POWER_CHORD = 0;
-    public static final int MAJOR_TRIAD = 1;
-    public static final int MINOR_TRIAD = 2;
-    public static final int SUSPENDED_FOURTH = 3;
-    public static final int DIMINISHED = 4;
-    public static final int HALF_DIMINISHED = 5;
-    public static final int AUGMENTED = 6;
-    //TEST
-    public static final int MAJOR_SEVENTH = 11;
-    public static final int FLAT_SEVENTH = 10;
-    public static final int DIMINISHED_SEVENTH = 9;
-
-    /*テンションノート*/
-    public static final int TENSION_NINETH = 14;
-    public static final int TENSION_ELEVENTH = 17;
-    public static final int TENSION_THIRTEENTH = 21;
-
-    private Key[] keyboard;
-
     private Thread thread;
     boolean isThreadRunning = false;
 
-    private int balloon_count = 72;
+    private Key[] keyboard;
+    private int keyboard_size = 72;
 
     //TEST
     private ChordTerm[] chord_sequence;
-    //Code.nowKey = Code.KEY_PITCH
-    //private int[][] code_terms = {{Code.nowKey},{Code.},{}}
     //TEST
     private String[] iroha = {"は","に","ほ","へ","と","い","ろ"};
     //TEST
@@ -153,7 +132,7 @@ public class KeyBoardView extends View implements Runnable{
         initialize();
     }
 
-    /**レイアウトファイルの中にはめ込む場合はこのコンストラクタが必要*/
+    /**レイアウトファイルの中にViewをはめ込む場合はこのコンストラクタが必要*/
     public KeyBoardView(Context context, AttributeSet attrs){
         super(context, attrs);
         this.context = context;
@@ -173,7 +152,7 @@ public class KeyBoardView extends View implements Runnable{
         paint_ball_number.setAntiAlias(true);
         paint_ball_number.setStyle(Paint.Style.FILL);    // (5)
 
-        keyboard = new Key[balloon_count];
+        keyboard = new Key[keyboard_size];
 
         float radius = 50;
         float init_x = 100;
@@ -188,7 +167,7 @@ public class KeyBoardView extends View implements Runnable{
 
         //FIXME 生成されるBalloonインスタンスの数が配列の長さより９個くらいなぜか多くなってしまう
         float y = upper_y;
-        for (int position=0;position<balloon_count;position++) {
+        for (int position = 0; position< keyboard_size; position++) {
             /**上下交互に並べる*/
             if (y != init_y) { /*下の段*/
                 y = init_y;
@@ -243,22 +222,10 @@ public class KeyBoardView extends View implements Runnable{
                     "  absolute_note_name="+ keyboard[position].absolute_note_name);
         }
 
-        now_key_scale = Scale.getScale();
+        now_key_scale = Scale.getScale(); //TODO パラメータ: major.minor...
 
         /*キーの初期値を指定してKeyBoardに反映*/
-        for (int position = 0; position< keyboard.length; position++) {
-            keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
-            //keyboard[i].indicator_on_key = Scale.getRelativeNoteIndicator(Scale.B_FLAT,i);//TEST
-            Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
-        }
-
-        for (int scale_note : now_key_scale){
-            for (int position = 0; position < keyboard.length; position++) {
-            if(keyboard[position].position_from_tonic == scale_note){
-                    keyboard[position].is_scale_note = true;
-                }
-            }
-        }
+        setupKeyBoardScaleOfNowKey();
 
 
         /**プレビュー画面でのエラー回避*/
@@ -284,6 +251,24 @@ public class KeyBoardView extends View implements Runnable{
 
         // wav をロードしておく
         sounds = setSoundPool();
+    }
+
+
+    public void setupKeyBoardScaleOfNowKey(){
+        for (int position = 0; position< keyboard.length; position++) {
+            keyboard[position].is_scale_note = false;
+            keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
+            //keyboard[i].indicator_on_key = Scale.getRelativeNoteIndicator(Scale.B_FLAT,i);//TEST
+            Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
+        }
+        for (int scale_note : now_key_scale){
+            for (int position = 0; position < keyboard.length; position++) {
+                if(keyboard[position].position_from_tonic == scale_note){
+                    keyboard[position].is_scale_note = true;
+                }
+            }
+        }
+        postInvalidate();
     }
 
     @Override
@@ -324,23 +309,6 @@ public class KeyBoardView extends View implements Runnable{
             paint_ball_number.setColor(Color.BLUE);
             canvas.drawText(keyboard[position].kana, num_x, num_y, paint_ball_number);
         }
-    }
-
-    public void setupKeyBoardScaleOfNowKey(){
-        for (int position = 0; position< keyboard.length; position++) {
-            keyboard[position].is_scale_note = false;
-            keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
-            //keyboard[i].indicator_on_key = Scale.getRelativeNoteIndicator(Scale.B_FLAT,i);//TEST
-            Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
-        }
-        for (int scale_note : now_key_scale){
-            for (int position = 0; position < keyboard.length; position++) {
-                if(keyboard[position].position_from_tonic == scale_note){
-                    keyboard[position].is_scale_note = true;
-                }
-            }
-        }
-        postInvalidate();
     }
 
     @Override

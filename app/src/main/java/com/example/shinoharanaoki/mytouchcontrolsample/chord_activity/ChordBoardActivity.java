@@ -2,6 +2,7 @@ package com.example.shinoharanaoki.mytouchcontrolsample.chord_activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ChordBoardActivity extends AppCompatActivity {
+
+    private static final String TAG = "ChordBoardActivity";
 
     private Spinner key_select_spinner;
     private Spinner root_select_spinner;
@@ -105,6 +108,7 @@ public class ChordBoardActivity extends AppCompatActivity {
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             Spinner spinner = (Spinner) parent;
                             root_relative_string = spinner.getSelectedItem().toString();
+                            Log.d(TAG, "onItemSelected: "+ root_relative_string);
                         }
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
@@ -164,7 +168,7 @@ public class ChordBoardActivity extends AppCompatActivity {
                     new_chord.setRoot(Chord.tonicRootStringToInt(root_absolute_string));
                 } else {
                     new_chord.setKey(key_tonic);
-                    new_chord.setRoot(Chord.tonicRootStringToInt(root_relative_string));
+                    new_chord.setRoot(Chord.degreeNameStringToInt(root_relative_string));
                 }
 
                 new_chord.setChordIntervalsBySymbol(Chord.chordSymbolStringToInt(chord_symbol));
