@@ -81,34 +81,41 @@
     <string-array name="chord_structure_array">
         <item>Major</item>
         <item>6</item>
+        <item>add9</item>
+        <item>6(9)</item>
         <item>M7</item>
+        <item>M9</item>
+        <item>M13</item>
+        <item>M7(♯11)</item>
+        <item>M9(♯11)</item>
+        <item>M13(♯11)</item>
         <item>7</item>
         <item>9</item>
-        <item>add9</item>
+        <item>7(♭9)</item>
+        <item>7(♯9)</item>
+        <item>7(♯11)</item>
+        <item>7(♭9,13)</item>
+        <item>13</item>
         <item>Minor</item>
         <item>m6</item>
+        <item>m add9</item>
+        <item>m6(9)</item>
         <item>mM7</item>
         <item>m7</item>
         <item>m9</item>
+        <item>m11</item>
+        <item>m13</item>
         <item>Diminished</item>
+        <item>m7(♭5)</item>
+        <item>7(♭5)</item>
+        <item>M7(♭5)</item>
+        <item>m11(♭5)</item>
         <item>Augumented</item>
+        <item>7(♯5)</item>
+        <item>M7(♯5)</item>
         <item>sus4</item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
-        <item></item>
+        <item>7sus4</item>
+        <item>9sus4</item>
     </string-array>
 
 </resources>

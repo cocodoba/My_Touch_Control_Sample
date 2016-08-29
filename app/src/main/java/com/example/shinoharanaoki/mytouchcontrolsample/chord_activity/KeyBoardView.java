@@ -138,16 +138,13 @@ public class KeyBoardView extends View implements Runnable{
     private int balloon_count = 72;
 
     //TEST
-    private ChordTerm chordTerm1 = new ChordTerm(new Chord(D,MINOR_TRIAD, FLAT_SEVENTH, TENSION_NINETH),2000);
-    private ChordTerm chordTerm2 = new ChordTerm(new Chord(G,MAJOR_TRIAD, FLAT_SEVENTH, TENSION_THIRTEENTH),2000);
-    private ChordTerm chordTerm3 = new ChordTerm(new Chord(C,MAJOR_TRIAD, MAJOR_SEVENTH, TENSION_NINETH),4000);
-    private ChordTerm[] chord_sequence = {chordTerm1,chordTerm2,chordTerm3};
+    private ChordTerm[] chord_sequence;
     //Code.nowKey = Code.KEY_PITCH
     //private int[][] code_terms = {{Code.nowKey},{Code.},{}}
     //TEST
     private String[] iroha = {"は","に","ほ","へ","と","い","ろ"};
     //TEST
-    private int nowKey = C;
+    public int nowKey = C;
     private int[] now_key_scale;
 
     public KeyBoardView(Context context){
@@ -251,10 +248,9 @@ public class KeyBoardView extends View implements Runnable{
         /*キーの初期値を指定してKeyBoardに反映*/
         for (int position = 0; position< keyboard.length; position++) {
             keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
-//            keyboard[i].indicator_on_key = Scale.getRelativeNoteIndicator(Scale.B_FLAT,i);//TEST
+            //keyboard[i].indicator_on_key = Scale.getRelativeNoteIndicator(Scale.B_FLAT,i);//TEST
             Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
         }
-
 
         for (int scale_note : now_key_scale){
             for (int position = 0; position < keyboard.length; position++) {
@@ -330,6 +326,23 @@ public class KeyBoardView extends View implements Runnable{
         }
     }
 
+    public void setupKeyBoardScaleOfNowKey(){
+        for (int position = 0; position< keyboard.length; position++) {
+            keyboard[position].is_scale_note = false;
+            keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
+            //keyboard[i].indicator_on_key = Scale.getRelativeNoteIndicator(Scale.B_FLAT,i);//TEST
+            Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
+        }
+        for (int scale_note : now_key_scale){
+            for (int position = 0; position < keyboard.length; position++) {
+                if(keyboard[position].position_from_tonic == scale_note){
+                    keyboard[position].is_scale_note = true;
+                }
+            }
+        }
+        postInvalidate();
+    }
+
     @Override
     public void run() {
         Log.d(TAG, "run: \"Thread Start!!\"");
@@ -355,7 +368,7 @@ public class KeyBoardView extends View implements Runnable{
 
             /** コード表示5-(A). コードからコードトーンを度数の形で出力する(キーボード全体に表示するため)*/
             int[] chord_tones = chord.getChordTriad();
-            Log.d(TAG, "run: chord_intervals = " + chord_tones[0]+chord_tones[1]+chord_tones[2]);
+            //Log.d(TAG, "run: chord_intervals = " + chord_tones[0]+chord_tones[1]+chord_tones[2]);
             /** コード表示5-(B). コードからコードトーンを確定音名の形で、高さ、転回等指定したうえで出力する(実際に鳴らすため)*/
             int[] chord_sounds = chord.generateChordSounds();
             /** コード表示6. ルートからのポジション番号と、コードトーンの度数が一致するものを照合する(キーボード全体)*/
@@ -399,15 +412,35 @@ public class KeyBoardView extends View implements Runnable{
                 }
             }
 
-            /** コード表示7-(C). キーボードのポジション番号と、テンションノート配列の数字が一致するものを照合して音を鳴らす*/
-            if (chord.getTensions()!=null) {
+            /** コード表示7-(C). キーボードのポジション番号と、ナインスノートの数字が一致するものを照合して音を鳴らす*/
+            if (chord.getNinth()!=OMITTED) {
                 for (int position = 0; position < keyboard.length; position++) {
-                    for (int tension_note : chord.getTensions()) {
-                        if (keyboard[position].position == tension_note) {
-                            keyboard[position].color = Color.MAGENTA;
-                            // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
-                            soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
-                        }
+                    if (keyboard[position].position == chord.getNinth()) {
+                        keyboard[position].color = Color.GREEN;
+                        // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
+                        soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
+                    }
+                }
+            }
+
+            /** コード表示7-(C). キーボードのポジション番号と、イレブンスノートの数字が一致するものを照合して音を鳴らす*/
+            if (chord.getEleventh()!=OMITTED) {
+                for (int position = 0; position < keyboard.length; position++) {
+                    if (keyboard[position].position == chord.getEleventh()) {
+                        keyboard[position].color = Color.CYAN;
+                        // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
+                        soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
+                    }
+                }
+            }
+
+            /** コード表示7-(C). キーボードのポジション番号と、サーティーンスノートの数字が一致するものを照合して音を鳴らす*/
+            if (chord.getThirteenth()!=OMITTED) {
+                for (int position = 0; position < keyboard.length; position++) {
+                    if (keyboard[position].position == chord.getThirteenth()) {
+                        keyboard[position].color = Color.CYAN;
+                        // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
+                        soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
                     }
                 }
             }
@@ -434,8 +467,9 @@ public class KeyBoardView extends View implements Runnable{
         }
     }
 
-    public void startThread(){
+    public void startThread(ChordTerm[] chordterms){
         if (!isThreadRunning) {
+            chord_sequence = chordterms;
             thread = new Thread(this);
             isThreadRunning = true;
             thread.start();
@@ -453,7 +487,6 @@ public class KeyBoardView extends View implements Runnable{
     boolean now_moving = false;
     float down_x;
     float down_y;
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {    // (7)
