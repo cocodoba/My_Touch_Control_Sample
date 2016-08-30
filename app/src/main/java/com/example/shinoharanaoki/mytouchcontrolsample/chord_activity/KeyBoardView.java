@@ -227,7 +227,6 @@ public class KeyBoardView extends View implements Runnable{
         /*キーの初期値を指定してKeyBoardに反映*/
         setupKeyBoardScaleOfNowKey();
 
-
         /**プレビュー画面でのエラー回避*/
         if (isInEditMode()) {
             // 編集モードだったら処理終了
@@ -327,6 +326,10 @@ public class KeyBoardView extends View implements Runnable{
             /** コード表示2. 「コード+時間」からコードを取り出す*/
             Chord chord = chord_term.getChord();
             Log.d(TAG, "run: chord_root =" +chord.getRoot());
+
+            nowKey = chord.getKey();
+            setupKeyBoardScaleOfNowKey(); //コードのキーに合わせてキーボード表示を変更
+
             for (int position = 0; position < keyboard.length; position++) {
                 /**コード表示3. 現在のコードルートに応じて、キーボードにルートからのポジション番号と、文字表示用のインジケータを割り振る*/
                 keyboard[position].position_from_root = chord.getPositionFromRoot(keyboard[position].absolute_note_name);
@@ -335,10 +338,10 @@ public class KeyBoardView extends View implements Runnable{
             }
 
             /** コード表示5-(A). コードからコードトーンを度数の形で出力する(キーボード全体に表示するため)*/
-            int[] chord_tones = chord.getChordTriad();
+            int[] chord_tones = chord.getChordTriad(); //FIXME
             //Log.d(TAG, "run: chord_intervals = " + chord_tones[0]+chord_tones[1]+chord_tones[2]);
             /** コード表示5-(B). コードからコードトーンを確定音名の形で、高さ、転回等指定したうえで出力する(実際に鳴らすため)*/
-            int[] chord_sounds = chord.generateChordSounds();
+            int[] chord_sounds = chord.generateChordSounds(); //TODO テンションも含めて全て取得できるようにする
             /** コード表示6. ルートからのポジション番号と、コードトーンの度数が一致するものを照合する(キーボード全体)*/
             for (int chord_tone : chord_tones) {
                 for (int position = 0; position < keyboard.length; position++) {

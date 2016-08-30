@@ -289,6 +289,10 @@ public class Chord {
         return root;
     }
 
+    public int getKey(){
+        return key;
+    }
+
     public int[] getChordTriad(){
         int[] chord_triad = new int[3];
         chord_triad[0] = root + 36; //+ offset
