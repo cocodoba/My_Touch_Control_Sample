@@ -8,6 +8,6 @@ public class ThreeBallsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new ThreeBallsView(ThreeBallsActivity.this));
+        setContentView(new MultiTouchView(ThreeBallsActivity.this));
     }
 }
