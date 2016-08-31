@@ -123,7 +123,7 @@ public class KeyBoardView extends View implements Runnable{
     //TEST
     private ChordTerm[] chord_sequence;
     //TEST
-    private String[] iroha = {"は","に","ほ","へ","と","い","ろ"};
+    private String[] iroha = {"C","D","E","F","G","A","B"};
     //TEST
     public int nowKey = C;
     private int[] now_key_scale;
@@ -209,7 +209,7 @@ public class KeyBoardView extends View implements Runnable{
         //TODO CからBbなどに変更できるようにoffset値を用意する
         int num = 0;
         int hight = 1;
-        for (int position = 0; position< keyboard.length; position++) {
+        for (int position = 0; position< keyboard_size; position++) {
             keyboard[position].absolute_note_name = num;
             keyboard[position].octave_hight = hight;
             if (num<OCTAVE) {
@@ -256,14 +256,14 @@ public class KeyBoardView extends View implements Runnable{
 
 
     public void setupKeyBoardScaleOfNowKey(){
-        for (int position = 0; position< keyboard.length; position++) {
+        for (int position = 0; position< keyboard_size; position++) {
             keyboard[position].is_scale_note = false;
             keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
             //keyboard[i].indicator_on_key = Scale.getRelativeNoteIndicator(Scale.B_FLAT,i);//TEST
             Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
         }
         for (int scale_note : now_key_scale){
-            for (int position = 0; position < keyboard.length; position++) {
+            for (int position = 0; position < keyboard_size; position++) {
                 if(keyboard[position].position_from_tonic == scale_note){
                     keyboard[position].is_scale_note = true;
                 }
@@ -276,7 +276,7 @@ public class KeyBoardView extends View implements Runnable{
     protected void onDraw(Canvas canvas) {
         // 円を描画する
 
-        for(int position = 0; position< keyboard.length; position++) {
+        for(int position = 0; position< keyboard_size; position++) {
 
             float ball_x = keyboard[position].cx;
             float ball_y = keyboard[position].cy;
@@ -318,7 +318,7 @@ public class KeyBoardView extends View implements Runnable{
         int now_progress = 0;
         while (isThreadRunning) {
                     /*いったんすべてのボールの色を元に戻す*/
-            for (int position = 0; position < keyboard.length; position++) {
+            for (int position = 0; position < keyboard_size; position++) {
                 keyboard[position].color = Color.BLUE;
             }
             postInvalidate();
@@ -332,7 +332,7 @@ public class KeyBoardView extends View implements Runnable{
             nowKey = chord.getKey();
             setupKeyBoardScaleOfNowKey(); //コードのキーに合わせてキーボード表示を変更
 
-            for (int position = 0; position < keyboard.length; position++) {
+            for (int position = 0; position < keyboard_size; position++) {
                 /**コード表示3. 現在のコードルートに応じて、キーボードにルートからのポジション番号と、文字表示用のインジケータを割り振る*/
                 keyboard[position].position_from_root = chord.getPositionFromRoot(keyboard[position].absolute_note_name);
                 /**コード表示4. コードにディミニッシュかオーギュメンテッドのフラグがあれば、該当する鍵盤のインジケータを変更する*/
@@ -346,7 +346,7 @@ public class KeyBoardView extends View implements Runnable{
             int[] chord_sounds = chord.generateChordSounds(); //TODO テンションも含めて全て取得できるようにする
             /** コード表示6. ルートからのポジション番号と、コードトーンの度数が一致するものを照合する(キーボード全体)*/
             for (int chord_tone : chord_tones) {
-                for (int position = 0; position < keyboard.length; position++) {
+                for (int position = 0; position < keyboard_size; position++) {
                     if (keyboard[position].position_from_root == chord_tone) {
                         keyboard[position].color = Color.RED;
                     }
@@ -354,7 +354,7 @@ public class KeyBoardView extends View implements Runnable{
             }
             /** コード表示7-(A). キーボードのポジション番号と、コードサウンド配列の数字が一致するものを照合して音を鳴らす*/
             for (int chord_sound : chord_sounds) {
-                for (int position = 0; position < keyboard.length; position++) {
+                for (int position = 0; position < keyboard_size; position++) {
                     if (keyboard[position].position == chord_sound) {
                         keyboard[position].color = Color.YELLOW;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
@@ -365,7 +365,7 @@ public class KeyBoardView extends View implements Runnable{
 
             /** コード表示7-(B). キーボードのポジション番号と、6thノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getSixth()!=OMITTED) {
-                for (int position = 0; position < keyboard.length; position++) {
+                for (int position = 0; position < keyboard_size; position++) {
                     if (keyboard[position].position == chord.getSixth()) {
                         keyboard[position].color = Color.CYAN;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
@@ -376,7 +376,7 @@ public class KeyBoardView extends View implements Runnable{
 
             /** コード表示7-(C). キーボードのポジション番号と、セブンスノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getSeventh()!=OMITTED) {
-                for (int position = 0; position < keyboard.length; position++) {
+                for (int position = 0; position < keyboard_size; position++) {
                     if (keyboard[position].position == chord.getSeventh()) {
                         keyboard[position].color = Color.CYAN;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
@@ -387,7 +387,7 @@ public class KeyBoardView extends View implements Runnable{
 
             /** コード表示7-(C). キーボードのポジション番号と、ナインスノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getNinth()!=OMITTED) {
-                for (int position = 0; position < keyboard.length; position++) {
+                for (int position = 0; position < keyboard_size; position++) {
                     if (keyboard[position].position == chord.getNinth()) {
                         keyboard[position].color = Color.GREEN;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
@@ -398,7 +398,7 @@ public class KeyBoardView extends View implements Runnable{
 
             /** コード表示7-(C). キーボードのポジション番号と、イレブンスノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getEleventh()!=OMITTED) {
-                for (int position = 0; position < keyboard.length; position++) {
+                for (int position = 0; position < keyboard_size; position++) {
                     if (keyboard[position].position == chord.getEleventh()) {
                         keyboard[position].color = Color.CYAN;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
@@ -409,7 +409,7 @@ public class KeyBoardView extends View implements Runnable{
 
             /** コード表示7-(C). キーボードのポジション番号と、サーティーンスノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getThirteenth()!=OMITTED) {
-                for (int position = 0; position < keyboard.length; position++) {
+                for (int position = 0; position < keyboard_size; position++) {
                     if (keyboard[position].position == chord.getThirteenth()) {
                         keyboard[position].color = Color.CYAN;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
@@ -491,7 +491,7 @@ public class KeyBoardView extends View implements Runnable{
 
                 pressure = event.getPressure(pointer_index);
 
-                for (int i=0;i<keyboard.length;i++) {
+                for (int i=0;i<keyboard_size;i++) {
                     if(keyboard[i].checkTouch(touch_point)){
                         Log.d(TAG, "onTouchEvent: KeyBoard[" + i + "] is touched");
                         keyboard[i].color = Color.YELLOW;
@@ -516,7 +516,7 @@ public class KeyBoardView extends View implements Runnable{
 
                 pressure = event.getPressure(pointer_index);
 
-                for (int i=0;i<keyboard.length;i++) {
+                for (int i=0;i<keyboard_size;i++) {
                     if(keyboard[i].checkTouch(touch_point)){
                         Log.d(TAG, "onTouchEvent: KeyBoard[" + i + "] is touched");
                         keyboard[i].color = Color.YELLOW;
@@ -537,7 +537,7 @@ public class KeyBoardView extends View implements Runnable{
                     release_point.x = event.getX(pointer_index);
                     release_point.y = event.getY(pointer_index);
 
-                    for (int i=0;i<keyboard.length;i++) {
+                    for (int i=0;i<keyboard_size;i++) {
                         if (keyboard[i].checkTouch(release_point)) {
                             Log.d(TAG, "onTouchEvent ACTION_POINTER_UP: Keyboard[" + i + "] is released");
                             keyboard[i].color = Color.BLUE;
@@ -555,7 +555,7 @@ public class KeyBoardView extends View implements Runnable{
                     release_point.x = event.getX(pointer_index);
                     release_point.y = event.getY(pointer_index);
 
-                    for (int i=0;i<keyboard.length;i++) {
+                    for (int i=0;i<keyboard_size;i++) {
                         if (keyboard[i].checkTouch(release_point)) {
                             Log.d(TAG, "onTouchEvent ACTION_UP: Keyboard[" + i + "] is released");
                             keyboard[i].color = Color.BLUE;
@@ -572,11 +572,11 @@ public class KeyBoardView extends View implements Runnable{
 
                 if (now_moving) {
                     if(point.x<=x_moving) {
-                        for (int position=0;position<keyboard.length;position++) {
+                        for (int position=0;position<keyboard_size;position++) {
                             keyboard[position].cx += x_moving-point.x;
                         }
                     }else {
-                        for (int position=0;position<keyboard.length;position++) {
+                        for (int position=0;position<keyboard_size;position++) {
                             keyboard[position].cx -= point.x-x_moving;
                         }
                     }
