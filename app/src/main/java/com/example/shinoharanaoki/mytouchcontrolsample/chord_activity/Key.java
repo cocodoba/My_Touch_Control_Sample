@@ -1,5 +1,6 @@
 package com.example.shinoharanaoki.mytouchcontrolsample.chord_activity;
 
+import android.graphics.PointF;
 import android.util.Log;
 
 /**
@@ -102,6 +103,16 @@ public class Key {
     }
 
     public boolean checkTouch(float x, float y){
+        if((x<cx+radius&&x>cx-radius)&&(y<cy+radius&&y>cy-radius)){
+            return true;
+        }else{return false;}
+    }
+
+    public boolean checkTouch(PointF point){
+
+        float x = point.x;
+        float y = point.y;
+
         if((x<cx+radius&&x>cx-radius)&&(y<cy+radius&&y>cy-radius)){
             return true;
         }else{return false;}

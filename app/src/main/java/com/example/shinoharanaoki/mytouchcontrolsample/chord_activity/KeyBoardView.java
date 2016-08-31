@@ -5,11 +5,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -460,52 +462,128 @@ public class KeyBoardView extends View implements Runnable{
     float down_y;
     float threshold = 10; //TODO user setting
 
+    private SparseArray<PointF> mActivePointers = new SparseArray<>();
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {    // (7)
+
+        // get pointer index from the event object
+        int pointer_index = event.getActionIndex();
+        // get pointer ID
+        int pointerId = event.getPointerId(pointer_index);
+        // get masked (not specific to a pointer) action
+        int maskedAction = event.getActionMasked();
+
+        PointF touch_point;
+        PointF release_point;
+        float pressure;
 
         touch_x = event.getX();    // (10)
         touch_y = event.getY();    // (11)
 
-        //final int[] sounds = {soundC4,soundD4,soundE4,soundF4,soundG4};
+        switch (maskedAction) {
 
-        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touch_point = new PointF();
+                touch_point.x = event.getX(pointer_index);
+                touch_point.y = event.getY(pointer_index);
+                mActivePointers.put(pointerId, touch_point);
 
-            case MotionEvent.ACTION_DOWN:    // 指をタッチした    // (8)
-                for (int position = 0; position< keyboard.length; position++) {
-                    if(keyboard[position].checkTouch(touch_x,touch_y)){
-                        Log.d(TAG, "onTouchEvent: Key[" + position + "] is touched");
-                        keyboard[position].color = Color.YELLOW;
-                        soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
+                pressure = event.getPressure(pointer_index);
+
+                for (int i=0;i<keyboard.length;i++) {
+                    if(keyboard[i].checkTouch(touch_point)){
+                        Log.d(TAG, "onTouchEvent: KeyBoard[" + i + "] is touched");
+                        keyboard[i].color = Color.YELLOW;
+                        soundPool.play(sounds[i], 1.0f, 1.0f, 0, 0, 1);
+
+                        break;
+                    }
+                    down_x = touch_point.x;
+                    down_y = touch_point.y;
+                    now_moving = true;
+                }
+                Log.d(TAG, "onTouchEvent: ACTION_DOWN Touch Pressure = "+ pressure );
+                break;
+
+            case MotionEvent.ACTION_POINTER_DOWN:
+
+                // We have a new pointer. Lets add it to the list of pointers
+                touch_point = new PointF();
+                touch_point.x = event.getX(pointer_index);
+                touch_point.y = event.getY(pointer_index);
+                mActivePointers.put(pointerId, touch_point);
+
+                pressure = event.getPressure(pointer_index);
+
+                for (int i=0;i<keyboard.length;i++) {
+                    if(keyboard[i].checkTouch(touch_point)){
+                        Log.d(TAG, "onTouchEvent: KeyBoard[" + i + "] is touched");
+                        keyboard[i].color = Color.YELLOW;
+                        soundPool.play(sounds[i], 1.0f, 1.0f, 0, 0, 1);
+
+                        now_moving = true;
+
                         break;
                     }
                 }
-                down_x = touch_x;
-                down_y = touch_y;
-                now_moving = true;
+                Log.d(TAG, "onTouchEvent: ACTION_POINTER_DOWN Touch Pressure = "+ pressure );
                 break;
 
-            case MotionEvent.ACTION_MOVE:    // 指を動かしている    // (9)
+            case MotionEvent.ACTION_POINTER_UP:
+
+                release_point = mActivePointers.get(event.getPointerId(pointer_index));
+                if (release_point != null) {
+                    release_point.x = event.getX(pointer_index);
+                    release_point.y = event.getY(pointer_index);
+
+                    for (int i=0;i<keyboard.length;i++) {
+                        if (keyboard[i].checkTouch(release_point)) {
+                            Log.d(TAG, "onTouchEvent ACTION_POINTER_UP: Keyboard[" + i + "] is released");
+                            keyboard[i].color = Color.BLUE;
+                        }
+                    }
+                }
+
+                break;
+
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+
+                release_point = mActivePointers.get(event.getPointerId(pointer_index));
+                if (release_point != null) {
+                    release_point.x = event.getX(pointer_index);
+                    release_point.y = event.getY(pointer_index);
+
+                    for (int i=0;i<keyboard.length;i++) {
+                        if (keyboard[i].checkTouch(release_point)) {
+                            Log.d(TAG, "onTouchEvent ACTION_UP: Keyboard[" + i + "] is released");
+                            keyboard[i].color = Color.BLUE;
+                            now_moving = false;
+                        }
+                    }
+                }
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+
+                PointF point = mActivePointers.get(event.getPointerId(pointer_index));
+                float x_moving = event.getX(pointer_index);
 
                 if (now_moving) {
-                    for (int position = 0; position< keyboard.length; position++) {
-                        if(down_x<=touch_x) {
-                            keyboard[position].cx += touch_x-down_x;
-                        }else {
-                            keyboard[position].cx -= down_x-touch_x;}
+                    if(point.x<=x_moving) {
+                        for (int position=0;position<keyboard.length;position++) {
+                            keyboard[position].cx += x_moving-point.x;
+                        }
+                    }else {
+                        for (int position=0;position<keyboard.length;position++) {
+                            keyboard[position].cx -= point.x-x_moving;
+                        }
                     }
-                    down_x = touch_x;
+                    point.x = x_moving;
                     now_moving = true;
                 }
-                break;
 
-            case MotionEvent.ACTION_UP:        // 指を離した    // (12)
-                for (int position = 0; position< keyboard.length; position++) {
-                    if (keyboard[position].checkTouch(touch_x,touch_y)) {
-                        Log.d(TAG, "onTouchEvent: Ball[" + position + "] is released");
-                        keyboard[position].color = Color.BLUE;
-                    }
-                }
-                now_moving = false;
                 break;
 
             default:
