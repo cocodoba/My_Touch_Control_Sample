@@ -1,6 +1,7 @@
 package com.example.shinoharanaoki.mytouchcontrolsample;
 
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.util.Log;
 
 /**
@@ -42,6 +43,16 @@ public class Ball {
 
 
     public boolean checkTouch(float x, float y){
+        if((x<cx+radius&&x>cx-radius)&&(y<cy+radius&&y>cy-radius)){
+            return true;
+        }else{return false;}
+    }
+
+    public boolean checkTouch(PointF point){
+
+        float x = point.x;
+        float y = point.y;
+
         if((x<cx+radius&&x>cx-radius)&&(y<cy+radius&&y>cy-radius)){
             return true;
         }else{return false;}

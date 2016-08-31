@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -76,139 +78,141 @@ public class ThreeBallsMultiTouchView extends View {
     boolean now_moving = false;
     float down_x;
     float down_y;
+    private SparseArray<PointF> mActivePointers = new SparseArray<>();
 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {    // (7)
 
-        int eventAction = event.getActionMasked();
-        int pointerIndex = event.getActionIndex();
-        int pointerId = event.getPointerId(pointerIndex);
+        // get pointer index from the event object
+        int pointer_index = event.getActionIndex();
+        // get pointer ID
+        int pointerId = event.getPointerId(pointer_index);
+        // get masked (not specific to a pointer) action
+        int maskedAction = event.getActionMasked();
 
-        switch (eventAction) {
+        PointF touch_point;
+        PointF release_point;
+        float pressure;
+
+        switch (maskedAction) {
             case MotionEvent.ACTION_DOWN:
-                break;
+                touch_point = new PointF();
+                touch_point.x = event.getX(pointer_index);
+                touch_point.y = event.getY(pointer_index);
+                mActivePointers.put(pointerId, touch_point);
 
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
+                pressure = event.getPressure(pointer_index);
 
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-
-            case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_UP:
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                break;
-        }
-
-        int action1 = event.getAction();
-        int action2 = event.getActionMasked();
-        int count = event.getPointerCount();
-
-        Log.d("", "getAction=0x" + String.format("%04x", action1) + ",getActionMasked=0x" + String.format("%04x", action2)
-                + ",getPointerCount=" + count);
-
-        for (int i=0; i<count; i++) {
-            int pid = event.getPointerId(i);
-            int id = event.findPointerIndex(pid);
-            if (id == -1)
-                continue;
-            float x = event.getX(id);
-            float y = event.getY(id);
-            float p = event.getPressure(id);
-            float s = event.getSize(id);
-            int hsize = event.getHistorySize();
-
-            String line = "\t";
-            line += "getPointerId=" + pid + ",";
-            line += "getHistorySize=" + hsize + ",";
-
-            for (int j=0; j<hsize; j++) {
-                float hx = event.getHistoricalX(id, j);
-                float hy = event.getHistoricalY(id, j);
-                float hp = event.getHistoricalPressure(id, j);
-                float hs = event.getHistoricalSize(id, j);
-                line += "x=" + String.format("%.2f", hx) + ",";
-                line += "y=" + String.format("%.2f", hy) + ",";
-                line += "p=" + String.format("%.4f", hp) + ",";
-                line += "s=" + String.format("%.4f", hs) + ",";
-            }
-
-            line += "x=" + String.format("%.2f", x) + ",";
-            line += "y=" + String.format("%.2f", y) + ",";
-            line += "p=" + String.format("%.4f", p) + ",";
-            line += "s=" + String.format("%.4f", s) + ",";
-
-            Log.e("", line);
-        }
-
-
-        /*touch_x = event.getX();    // (10)
-        touch_y = event.getY();    // (11)
-
-
-        switch (event.getAction()) {
-
-            case MotionEvent.ACTION_DOWN:    // 指をタッチした    // (8)
                 for (int i=0;i<balls.length;i++) {
-                    if(balls[i].checkTouch(touch_x,touch_y)){
+                    if(balls[i].checkTouch(touch_point)){
                         Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
                         balls[i].color = Color.YELLOW;
 
-                        down_x = touch_x;
-                        down_y = touch_y;
+                        down_x = touch_point.x;
+                        down_y = touch_point.y;
                         now_moving = true;
 
                         break;
                     }
                 }
+                Log.d(TAG, "onTouchEvent: ACTION_DOWN Touch Pressure = "+ pressure );
                 break;
 
-            case MotionEvent.ACTION_MOVE:    // 指を動かしている    // (9)
+            case MotionEvent.ACTION_POINTER_DOWN:
 
-                if (now_moving) {
+                // We have a new pointer. Lets add it to the list of pointers
+                touch_point = new PointF();
+                touch_point.x = event.getX(pointer_index);
+                touch_point.y = event.getY(pointer_index);
+                mActivePointers.put(pointerId, touch_point);
+
+                pressure = event.getPressure(pointer_index);
+
+                for (int i=0;i<balls.length;i++) {
+                    if(balls[i].checkTouch(touch_point)){
+                        Log.d(TAG, "onTouchEvent: Ball[" + i + "] is touched");
+                        balls[i].color = Color.YELLOW;
+
+                        down_x = touch_point.x;
+                        down_y = touch_point.y;
+                        now_moving = true;
+
+                        break;
+                    }
+                }
+                Log.d(TAG, "onTouchEvent: ACTION_POINTER_DOWN Touch Pressure = "+ pressure );
+                break;
+
+            case MotionEvent.ACTION_POINTER_UP:
+
+                release_point = mActivePointers.get(event.getPointerId(pointer_index));
+                if (release_point != null) {
+                    release_point.x = event.getX(pointer_index);
+                    release_point.y = event.getY(pointer_index);
+
                     for (int i=0;i<balls.length;i++) {
-                        if(balls[i].checkTouch(touch_x,touch_y)){
-                            Log.d(TAG, "onTouchEvent: Ball[" + i + "] is moving");
-                            if(down_x<=touch_x) {
-                                balls[i].cx += touch_x-down_x;
-                                down_x = touch_x;
-                            }else {
-                                balls[i].cx -= down_x-touch_x;
-                                down_x = touch_x;}
-                            if(down_y<=touch_y) {
-                                balls[i].cy += touch_y-down_y;
-                                down_y = touch_y;
-                            }else {
-                                balls[i].cy -= down_y-touch_y;
-                                down_y = touch_y;}
-
-                            balls[i].color = Color.RED;
-
-                            now_moving = true;
+                        if (balls[i].checkTouch(release_point)) {
+                            Log.d(TAG, "onTouchEvent ACTION_POINTER_UP: Ball[" + i + "] is released");
+                            balls[i].color = Color.BLUE;
                         }
                     }
                 }
 
                 break;
 
-            case MotionEvent.ACTION_UP:        // 指を離した    // (12)
-                for (int i=0;i<balls.length;i++) {
-                    if (balls[i].checkTouch(touch_x,touch_y)) {
-                        Log.d(TAG, "onTouchEvent: Ball[" + i + "] is released");
-                        balls[i].color = Color.BLUE;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
 
-                        now_moving = false;
+                release_point = mActivePointers.get(event.getPointerId(pointer_index));
+                if (release_point != null) {
+                    release_point.x = event.getX(pointer_index);
+                    release_point.y = event.getY(pointer_index);
+
+                    for (int i=0;i<balls.length;i++) {
+                        if (balls[i].checkTouch(release_point)) {
+                            Log.d(TAG, "onTouchEvent ACTION_UP: Ball[" + i + "] is released");
+                            balls[i].color = Color.BLUE;
+                            now_moving = false;
+                        }
                     }
                 }
                 break;
 
-            default:
-                assert true;    // 何もしない
+            case MotionEvent.ACTION_MOVE:
+
+                for (int size = event.getPointerCount(), i = 0; i < size; i++) {
+
+                    PointF point = mActivePointers.get(event.getPointerId(i));
+                    float x_moving = event.getX(i);
+                    float y_moving = event.getY(i);
+
+                    if (now_moving) {
+                        for (int j=0;j<balls.length;j++) {
+                            if(balls[j].checkTouch(point)){
+                                Log.d(TAG, "onTouchEvent: Ball[" + j + "] is moving");
+                                if(point.x<=x_moving) {
+                                    balls[j].cx += x_moving-point.x;
+                                    point.x = x_moving;
+                                }else {
+                                    balls[j].cx -= point.x-x_moving;
+                                    point.x = x_moving;}
+                                if(point.y<=y_moving) {
+                                    balls[j].cy += y_moving-point.y;
+                                    point.y = y_moving;
+                                }else {
+                                    balls[j].cy -= point.y-y_moving;
+                                    point.y = y_moving;}
+
+                                balls[j].color = Color.RED;
+
+                                now_moving = true;
+                            }
+                        }
+                    }
+                }
                 break;
-        }*/
+        }
 
         invalidate();    // (13)
 
