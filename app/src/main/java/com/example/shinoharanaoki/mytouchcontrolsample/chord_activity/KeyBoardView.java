@@ -458,6 +458,7 @@ public class KeyBoardView extends View implements Runnable{
     boolean now_moving = false;
     float down_x;
     float down_y;
+    float threshold = 10; //TODO user setting
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {    // (7)
@@ -475,32 +476,26 @@ public class KeyBoardView extends View implements Runnable{
                         Log.d(TAG, "onTouchEvent: Key[" + position + "] is touched");
                         keyboard[position].color = Color.YELLOW;
                         soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
-
-                        down_x = touch_x;
-                        down_y = touch_y;
-                        now_moving = true;
-
                         break;
                     }
                 }
+                down_x = touch_x;
+                down_y = touch_y;
+                now_moving = true;
                 break;
 
             case MotionEvent.ACTION_MOVE:    // 指を動かしている    // (9)
 
                 if (now_moving) {
                     for (int position = 0; position< keyboard.length; position++) {
-                        Log.d(TAG, "onTouchEvent: Key[" + position + "] is moving");
-                        for (int index = 0; index< keyboard.length; index++) {
-                            if(down_x<=touch_x) {
-                                keyboard[index].cx += touch_x-down_x;
-                            }else {
-                                keyboard[index].cx -= down_x-touch_x;}
-                        }
-                        down_x = touch_x;
-                        now_moving = true;
+                        if(down_x<=touch_x) {
+                            keyboard[position].cx += touch_x-down_x;
+                        }else {
+                            keyboard[position].cx -= down_x-touch_x;}
                     }
+                    down_x = touch_x;
+                    now_moving = true;
                 }
-
                 break;
 
             case MotionEvent.ACTION_UP:        // 指を離した    // (12)
@@ -508,10 +503,9 @@ public class KeyBoardView extends View implements Runnable{
                     if (keyboard[position].checkTouch(touch_x,touch_y)) {
                         Log.d(TAG, "onTouchEvent: Ball[" + position + "] is released");
                         keyboard[position].color = Color.BLUE;
-
-                        now_moving = false;
                     }
                 }
+                now_moving = false;
                 break;
 
             default:
