@@ -25,6 +25,7 @@ public class ChordBoardActivity extends AppCompatActivity {
     private EditText term_length_imput;
 
     private KeyBoardView keyboard_view;
+    private ChordTermEditView chord_edit_view;
     private boolean isThreadRunning = false;
 
     public ArrayList<ChordTerm> chordTerms_arraylist; //スレッド再生用
@@ -41,8 +42,10 @@ public class ChordBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chord_board);
 
         keyboard_view = (KeyBoardView) findViewById(R.id.keyboard_view);
+        chord_edit_view = (ChordTermEditView)findViewById(R.id.chordterm_edit_view);
 
         chordTerms_arraylist = new ArrayList<>();
+        chord_edit_view.setChordTermsList(chordTerms_arraylist);
 
         // Spinnerの設定
         /* 1. キーを選択するスピナー*/
@@ -86,9 +89,12 @@ public class ChordBoardActivity extends AppCompatActivity {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             Spinner spinner = (Spinner) parent;
+                            root_absolute_string = spinner.getSelectedItem().toString();
                         }
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
+                            Spinner spinner = (Spinner) parent;
+                            root_absolute_string = spinner.getItemAtPosition(0).toString();
                         }
                     });
                 }else{
@@ -110,22 +116,29 @@ public class ChordBoardActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
+                            Spinner spinner = (Spinner) parent;
+                            root_relative_string = spinner.getItemAtPosition(0).toString();
                         }
                     });
                 }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                /**(キー指定なし)*/
+                /*2(A). ルートをC,D,E,,,で選択するスピナー*/
+                is_key_selected = false;
                 root_absolute_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 root_select_spinner.setAdapter(root_absolute_adapter);
                 root_select_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         Spinner spinner = (Spinner) parent;
-                        root_relative_string = spinner.getSelectedItem().toString();
+                        root_absolute_string = spinner.getSelectedItem().toString();
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
+                        Spinner spinner = (Spinner) parent;
+                        root_absolute_string = spinner.getItemAtPosition(0).toString();
                     }
                 });
             }
@@ -161,17 +174,19 @@ public class ChordBoardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Chord new_chord = new Chord();
-                new_chord.setKey(Chord.tonicRootStringToInt(tonic_string));
                 if (!is_key_selected) {
-                    new_chord.setRoot(Chord.tonicRootStringToInt(root_absolute_string));
+                    new_chord.setRoot(Chord.tonicRootStringToInt(root_absolute_string), root_absolute_string);
                 } else {
+                    new_chord.setKey(Chord.tonicRootStringToInt(tonic_string));
                     new_chord.setKey(key_tonic);
-                    new_chord.setRoot(Chord.degreeNameStringToInt(root_relative_string));
+                    new_chord.setRoot(Chord.degreeNameStringToInt(root_relative_string), root_relative_string);
                 }
 
-                new_chord.setChordIntervalsBySymbol(Chord.chordSymbolStringToInt(chord_symbol));
+                new_chord.setChordIntervalsBySymbol(Chord.chordSymbolStringToInt(chord_symbol), chord_symbol);
                 ChordTerm new_chordterm = new ChordTerm(new_chord,2000);
                 chordTerms_arraylist.add(new_chordterm);
+
+                chord_edit_view.setChordTermsList(chordTerms_arraylist);
 
             }
         });
