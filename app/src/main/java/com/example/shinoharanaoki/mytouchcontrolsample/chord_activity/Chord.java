@@ -130,6 +130,7 @@ public class Chord {
     /*最終的に出来たコードのルート*/
     private int root;
     private int root_height = OCTAVE_INTERVAL*chords_hight;
+    private String root_string;
 
     private int third_or_fourth = OMITTED;
     private int fifth = OMITTED;
@@ -138,16 +139,19 @@ public class Chord {
     private int ninth = OMITTED;
     private int eleventh = OMITTED;
     private int thirteenth = OMITTED;
+    private String chord_symbol_string;
+
     /*ダブルフラットやダブルシャープの表示に対応するためのフラグ*/
     public boolean flag_diminished;
     public boolean flag_augumented;
 
 
-    public void setRoot(int root) {
+    public void setRoot(int root, String root_string) {
         this.root =  key + root;
+        this.root_string = root_string;
     }
 
-    public void setChordIntervalsBySymbol(int chord_symbol){
+    public void setChordIntervalsBySymbol(int chord_symbol, String chord_symbol_string){
 
         if(chord_symbol == MAJOR||chord_symbol == SIXTH||chord_symbol == ADD_NINTH||chord_symbol == SIXTH_NINTH
                 ||chord_symbol == MAJOR_SEVENTH||chord_symbol == MAJOR_NINTH||chord_symbol == MAJOR_THIRTEENTH
@@ -231,6 +235,8 @@ public class Chord {
             thirteenth = root + root_height + _XIII;
         }
 
+        this.chord_symbol_string = chord_symbol_string;
+
     }
 
     public void setChordTriadIntervals(int triad_type){
@@ -289,6 +295,10 @@ public class Chord {
         return root;
     }
 
+    public String getRootString(){
+        return root_string;
+    }
+
     public int getKey(){
         return key;
     }
@@ -331,6 +341,10 @@ public class Chord {
 
     public void setSeventh(int seventh) {
         this.seventh = seventh;
+    }
+
+    public String getChordSymbolString(){
+        return chord_symbol_string;
     }
 
     //TODO

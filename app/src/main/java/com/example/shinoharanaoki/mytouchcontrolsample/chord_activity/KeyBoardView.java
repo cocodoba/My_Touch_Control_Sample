@@ -259,7 +259,7 @@ public class KeyBoardView extends View implements Runnable{
         for (int position = 0; position< keyboard_size; position++) {
             keyboard[position].is_scale_note = false;
             keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
-            //keyboard[i].indicator_on_key = Scale.getRelativeNoteIndicator(Scale.B_FLAT,i);//TEST
+            //keyboard[i].indicator_on_key = Scale.getActualNoteIndicator(Scale.B_FLAT,i);//TEST
             Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
         }
         for (int scale_note : now_key_scale){

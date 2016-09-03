@@ -110,23 +110,24 @@ public class Scale {
     public static final boolean[] BLUCE_SCALE = {};
     public static final boolean[] RYUKYU_SCALE = {};
 
-    public static int[] F_MAJOR_D_MINOR = {C,D_FLAT,D,E_FLAT,E,F,G_FLAT,G,A_FLAT,A,B_FLAT,B_NATURAL};
-    public static int[] B_FLAT_MAJOR_G_MINOR = {C,D_FLAT,D,E_FLAT,E_NATURAL,F,G_FLAT,G,A_FLAT,A,B_FLAT,B_NATURAL};
+    /*キーを選択した場合に各キーボードに保存する*/
+    public static int[] F_MAJOR_D_MINOR = {F,G_FLAT,G,A_FLAT,A,B_FLAT,B_NATURAL,C,D_FLAT,D,E_FLAT,E};
+    public static int[] B_FLAT_MAJOR_G_MINOR = {B_FLAT,B_NATURAL,C,D_FLAT,D,E_FLAT,E_NATURAL,F,G_FLAT,G,A_FLAT,A};
     public static int[] E_FLAT_MAJOR_C_MINOR = {E_FLAT,E_NATURAL,F,G_FLAT,G,A_FLAT,A_NATURAL,B_FLAT,B_NATURAL,C,D_FLAT,D};
     public static int[] A_FLAT_MAJOR_F_MINOR = {A_FLAT,A_NATURAL,B_FLAT,B_NATURAL,C,D_FLAT,D_NATURAL,E_FLAT,E_NATURAL,F,G_FLAT,G};
     public static int[] D_FLAT_MAJOR_B_FLAT_MINOR = {D_FLAT,D_NATURAL,E_FLAT,E_NATURAL,F,G_FLAT,G_NATURAL,A_FLAT,A,B_FLAT,B_NATURAL,C};
     public static int[] G_FLAT_MAJOR_E_FLAT_MINOR = {G_FLAT,G_NATURAL,A_FLAT,A,B_FLAT,C_FLAT,C_NATURAL,D_FLAT,D,E_FLAT,E_NATURAL,F};
     public static int[] C_FLAT_MAJOR_A_FLAT_MINOR = {C_FLAT,C_NATURAL,D_FLAT,D,E_FLAT,F_FLAT,F_NATURAL,G_FLAT,G,A_FLAT,A,B_FLAT};
 
-    //TODO
-    /*public static int[] C_MAJOR_A_MINOR = {,,,,,,,,,,,};
-    public static int[] G_MAJOR_E_MINOR = {,,,,,,,,,,,};
-    public static int[] D_MAJOR_B_MINOR = {,,,,,,,,,,,};
-    public static int[] A_MAJOR_F_SHARP_MINOR = {,,,,,,,,,,,};
-    public static int[] E_MAJOR_C_SHARP_MINOR = {,,,,,,,,,,,};
-    public static int[] B_MAJOR_G_SHARP_MINOR = {,,,,,,,,,,,};
-    public static int[] F_SHARP_MAJOR_D_SHARP_MINOR = {,,,,,,,,,,,};
-    public static int[] C_SHARP_MAJOR_A_SHARP_MINOR = {,,,,,,,,,,,};*/
+    public static int[] C_MAJOR_A_MINOR = {C,C_SHARP,D,D_SHARP,E,F,F_SHARP,G,G_SHARP,A,A_SHARP,B};
+    public static int[] G_MAJOR_E_MINOR = {G,G_SHARP,A,A_SHARP,B,C,C_SHARP,D,D_SHARP,E,F_NATURAL,F_SHARP};
+    public static int[] D_MAJOR_B_MINOR = {D,D_SHARP,E,F_NATURAL,F_SHARP,G,G_SHARP,A,A_SHARP,B,C_NATURAL,C_SHARP};
+    public static int[] A_MAJOR_F_SHARP_MINOR = {A,A_SHARP,B,C_NATURAL,C_SHARP,D,D_SHARP,E,F_NATURAL,F_SHARP,G_NATURAL,G_SHARP};
+    public static int[] E_MAJOR_C_SHARP_MINOR = {E,F_NATURAL,F_SHARP,G_NATURAL,G_SHARP,A,A_SHARP,B,C_NATURAL,C_SHARP,D_NATURAL,D_SHARP};
+    public static int[] B_MAJOR_G_SHARP_MINOR = {B,C_NATURAL,C_SHARP,D_NATURAL,D_SHARP,E,F_NATURAL,F_SHARP,G_NATURAL,G_SHARP,A_NATURAL,A_SHARP};
+    //FIXME
+    public static int[] F_SHARP_MAJOR_D_SHARP_MINOR = {F_SHARP,G,G_SHARP,A,A_SHARP,B,C,C_SHARP,D,D_SHARP,E,F};
+    public static int[] C_SHARP_MAJOR_A_SHARP_MINOR = {C_SHARP,D,D_SHARP,E,F,F_SHARP,G,G_SHARP,A,A_SHARP,B,C,};
 
     public static int getKeyPositionFromTonic(int tonic, int note){
 
@@ -142,7 +143,7 @@ public class Scale {
         return major_scale;
     }
 
-    /*public static int getRelativeNoteIndicator(int tonic, int note){
+    /*public static int getActualNoteIndicator(int tonic, int note){
 
         switch (tonic){
 
