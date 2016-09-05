@@ -422,7 +422,128 @@ public class Chord {
         return tonic_or_root_int;
     }
 
-    public static int degreeNameStringToInt(String  degree_name){
+    public static int keyStringToTonicPositionInt(String key_string){
+        int tonic_position_int;
+
+        switch (key_string){
+            case "C major":
+                tonic_position_int = C;
+                break;
+            case "C♭ major":
+                tonic_position_int = C_FLAT;
+                break;
+            case "C♯ major":
+                tonic_position_int = C_SHARP;
+                break;
+            case "D major":
+                tonic_position_int = D;
+                break;
+            case "D♭ major":
+                tonic_position_int = D_FLAT;
+                break;
+            case "E major":
+                tonic_position_int = E;
+                break;
+            case "E♭ major":
+                tonic_position_int = E_FLAT;
+                break;
+            case "F major":
+                tonic_position_int = F;
+                break;
+            case "F♯ major":
+                tonic_position_int = F_SHARP;
+                break;
+            case "G major":
+                tonic_position_int = G;
+                break;
+            case "G♭ major":
+                tonic_position_int = G_FLAT;
+                break;
+            case "A major":
+                tonic_position_int = A;
+                break;
+            case "A♭ major":
+                tonic_position_int = A_FLAT;
+                break;
+            case "B major":
+                tonic_position_int = B;
+                break;
+            case "B♭ major":
+                tonic_position_int = B_FLAT;
+                break;
+
+
+            case "C minor":
+                tonic_position_int = C;
+                break;
+            case "C♭ minor":
+                tonic_position_int = C_FLAT;
+                break;
+            case "C♯ minor":
+                tonic_position_int = C_SHARP;
+                break;
+            case "D minor":
+                tonic_position_int = D;
+                break;
+            case "D♭ minor":
+                tonic_position_int = D_FLAT;
+                break;
+            case "D♯ minor":
+                tonic_position_int = D_SHARP;
+                break;
+            case "E minor":
+                tonic_position_int = E;
+                break;
+            case "E♭ minor":
+                tonic_position_int = E_FLAT;
+                break;
+            case "E♯ minor":
+                tonic_position_int = E_SHARP;
+                break;
+            case "F minor":
+                tonic_position_int = F;
+                break;
+            case "F♭ minor":
+                tonic_position_int = F_FLAT;
+                break;
+            case "F♯ minor":
+                tonic_position_int = F_SHARP;
+                break;
+            case "G minor":
+                tonic_position_int = G;
+                break;
+            case "G♭ minor":
+                tonic_position_int = G_FLAT;
+                break;
+            case "G♯ minor":
+                tonic_position_int = G_SHARP;
+                break;
+            case "A minor":
+                tonic_position_int = A;
+                break;
+            case "A♭ minor":
+                tonic_position_int = A_FLAT;
+                break;
+            case "A♯ minor":
+                tonic_position_int = A_SHARP;
+                break;
+            case "B minor":
+                tonic_position_int = B;
+                break;
+            case "B♭ minor":
+                tonic_position_int = B_FLAT;
+                break;
+            case "B♯ minor":
+                tonic_position_int = B_SHARP;
+                break;
+
+            default:
+                tonic_position_int = C;
+        }
+        return tonic_position_int;
+    }
+
+    public static int degreeNameStringToInt(String degree_name){
 
         int degree_name_int;
 

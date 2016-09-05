@@ -30,7 +30,7 @@ public class ChordBoardActivity extends AppCompatActivity {
 
     public ArrayList<ChordTerm> chordTerms_arraylist; //スレッド再生用
     private int key_tonic;     //キーボードのキー表示変更用
-    public String tonic_string;   //キーを指定した場合のトニック
+    public String key_string;  //key選択スピナーで取得したキー名を保持
     public String root_absolute_string; //キーを指定していない場合のルート音
     public String root_relative_string; //キーを指定している場合のスケール上のルート音程
     public String chord_symbol;
@@ -100,8 +100,9 @@ public class ChordBoardActivity extends AppCompatActivity {
                 }else{
                     /**(キー選択)*/
                     is_key_selected = true;
-                    tonic_string = spinner.getSelectedItem().toString();
-                    key_tonic = Chord.tonicRootStringToInt(tonic_string);
+                    key_string = spinner.getSelectedItem().toString();//FIXME
+                    keyboard_view.nowKeyString = key_string;
+                    key_tonic = Chord.keyStringToTonicPositionInt(key_string);
                     keyboard_view.nowKey = key_tonic;
                     keyboard_view.setupKeyBoardScaleOfNowKey();
 
@@ -177,13 +178,14 @@ public class ChordBoardActivity extends AppCompatActivity {
                 if (!is_key_selected) {
                     new_chord.setRoot(Chord.tonicRootStringToInt(root_absolute_string), root_absolute_string);
                 } else {
-                    new_chord.setKey(Chord.tonicRootStringToInt(tonic_string));
+                    new_chord.setKey(Chord.keyStringToTonicPositionInt(key_string));
                     new_chord.setKey(key_tonic);
                     new_chord.setRoot(Chord.degreeNameStringToInt(root_relative_string), root_relative_string);
                 }
 
                 new_chord.setChordIntervalsBySymbol(Chord.chordSymbolStringToInt(chord_symbol), chord_symbol);
-                ChordTerm new_chordterm = new ChordTerm(new_chord,2000);
+                ChordTerm new_chordterm = new ChordTerm(new_chord, 2000);
+                new_chordterm.setKey_string(key_string);
                 chordTerms_arraylist.add(new_chordterm);
 
                 chord_edit_view.setChordTermsList(chordTerms_arraylist);

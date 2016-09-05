@@ -10,7 +10,7 @@ public class Scale {
     public static final int OCTAVE = 11;
 
     /**
-     * Actual Note Names
+     * Actual Note Names Indicator
      * */
     public static final int C = 1;
     public static final int C_NATURAL = 2;
@@ -61,33 +61,40 @@ public class Scale {
     public static final int B_DOUBLE_FLAT = 41;
     public static final int B_DOUBLE_SHARP = 42;
 
-    public static final int _C = 0;
-    public static final int _C_SHARP_D_FLAT = 1;
-    //public static final int _C_SHARP_D_FLAT_MINOR = 4;
-    public static final int _D = 2;
-    //public static final int _D_MINOR = 6;
-    public static final int _D_SHARP_E_FLAT = 3;
-    //public static final int _D_SHARP_E_FLAT_MINOR = 8;
-    public static final int _E = 4;
-    //public static final int _E_MINOR = 10;
-    //public static final int _E_SHARP_F = 6;
-    //public static final int _E_SHARP_F_MINOR = 12;
-    public static final int _F = 5;
-    //public static final int _F_MINOR = 14;
-    public static final int _F_SHARP_G_FLAT = 6;
-    //public static final int _F_SHARP_G_FLAT_MINOR = 16;
-    public static final int _G = 7;
-    //public static final int _G_MINOR = 18;
-    public static final int _G_SHARP_A_FLAT = 8;
-    //public static final int _G_SHARP_A_FLAT_MINOR =20;
-    public static final int _A = 9;
-    //public static final int _A_MINOR = 22;
-    public static final int _A_SHARP_B_FLAT = 10;
-    //public static final int _A_SHARP_B_FLAT_MINOR = 24;
-    public static final int _B = 11;
-    //public static final int _B_MINOR = 26;
-    //public static final int _B_SHARP_C = 13;
-    //public static final int _B_SHARP_C_MINOR = 28;
+    /*キーの種類(Major, Minor)*/
+    //メジャー系15種
+    public static final int C_MAJOR = 0;
+    public static final int C_SHARP_MAJOR = 1;
+    public static final int D_FLAT_MAJOR= 2;
+    public static final int D_MAJOR= 3;
+    public static final int E_FLAT_MAJOR= 4;
+    public static final int E_MAJOR= 5;
+    public static final int F_MAJOR= 6;
+    public static final int F_SHARP_MAJOR= 7;
+    public static final int G_FLAT_MAJOR= 8;
+    public static final int G_MAJOR= 9;
+    public static final int A_FLAT_MAJOR= 10;
+    public static final int A_MAJOR= 11;
+    public static final int B_FLAT_MAJOR= 12;
+    public static final int B_MAJOR= 13;
+    public static final int C_FLAT_MAJOR= 14;
+    //マイナー系15種
+    public static final int A_MINOR= 15;
+    public static final int A_SHARP_MINOR= 16;
+    public static final int B_MINOR= 17;
+    public static final int B_FLAT_MINOR= 18;
+    public static final int C_MINOR= 19;
+    public static final int C_SHARP_MINOR= 20;
+    public static final int D_MINOR= 21;
+    public static final int D_SHARP_MINOR= 22;
+    public static final int E_MINOR= 23;
+    public static final int E_FLAT_MINOR= 24;
+    public static final int F_MINOR= 25;
+    public static final int F_SHARP_MINOR= 26;
+    public static final int G_MINOR= 27;
+    public static final int G_SHARP_MINOR= 28;
+    public static final int A_FLAT_MINOR= 29;
+
 
     public static final int _TONIC            = 0; //Do
     public static final int _SUPERTONIC_MINOR = 1;
@@ -143,18 +150,192 @@ public class Scale {
         return major_scale;
     }
 
-    /*public static int getActualNoteIndicator(int tonic, int note){
+    public static int getActualNoteIndicator(int key, int position_from_tonic){
 
-        switch (tonic){
+        //TODO
+        switch (key){
 
-            case B_FLAT:
-                return B_FLAT_MAJOR_G_MINOR[note];
+            case C:
+                return C_MAJOR_A_MINOR[position_from_tonic];
+
+            case B_FLAT_MAJOR:
+                return B_FLAT_MAJOR_G_MINOR[position_from_tonic];
 
             default:
-                return F_MAJOR_D_MINOR[note];
+                return C_MAJOR_A_MINOR[position_from_tonic];
 
         }
 
-    }*/
+    }
+
+
+    public static String NoteIndicatorToString(int indicator){
+
+        switch (indicator){
+
+            case C:
+                return "C";
+            case C_NATURAL:
+                return "C♮";
+            case C_FLAT:
+                return "C♭";
+            case C_SHARP:
+                return "C♯";
+            case C_DOUBLE_FLAT:
+                return "C♭♭";
+            case C_DOUBLE_SHARP:
+                return "C♯♯";
+            case D:
+                return "D";
+            case D_NATURAL:
+                return "D♮";
+            case D_FLAT:
+                return "D♭";
+            case D_SHARP:
+                return "D♯";
+            case D_DOUBLE_FLAT:
+                return "D♭♭";
+            case D_DOUBLE_SHARP:
+                return "D♯♯";
+            case E:
+                return "E";
+            case E_NATURAL:
+                return "E♮";
+            case E_FLAT:
+                return "E♭";
+            case E_SHARP:
+                return "E♯";
+            case E_DOUBLE_FLAT:
+                return "E♭♭";
+            case E_DOUBLE_SHARP:
+                return "E♯♯";
+            case F:
+                return "F";
+            case F_NATURAL:
+                return "F♮";
+            case F_FLAT:
+                return "F♭";
+            case F_SHARP:
+                return "F♯";
+            case F_DOUBLE_FLAT:
+                return "F♭♭";
+            case F_DOUBLE_SHARP:
+                return "F♯♯";
+            case G:
+                return "G";
+            case G_NATURAL:
+                return "G♮";
+            case G_FLAT:
+                return "G♭";
+            case G_SHARP:
+                return "G♯";
+            case G_DOUBLE_FLAT:
+                return "G♭♭";
+            case G_DOUBLE_SHARP:
+                return "G♯♯";
+            case A:
+                return "A";
+            case A_NATURAL:
+                return "A♮";
+            case A_FLAT:
+                return "A♭";
+            case A_DOUBLE_FLAT:
+                return "A♭♭";
+            case A_SHARP:
+                return "A♯";
+            case A_DOUBLE_SHARP:
+                return "A♯♯";
+            case B:
+                return "B";
+            case B_NATURAL:
+                return "B♮";
+            case B_FLAT:
+                return "B♭";
+            case B_SHARP:
+                return "B♯";
+            case B_DOUBLE_FLAT:
+                return "B♭♭";
+            case B_DOUBLE_SHARP:
+                return "B♯♯";
+
+            default:
+                return "?";
+
+        }
+    }
+
+    public static int keyStringToInt(String key_name){
+
+        switch (key_name){
+
+            case "C major":
+                return C_MAJOR;
+            case "F major":
+                return F_MAJOR;
+            case "B♭ major":
+                return B_FLAT_MAJOR;
+            case "E♭ major":
+                return E_FLAT_MAJOR;
+            case "A♭ major":
+                return A_FLAT_MAJOR;
+            case "D♭ major":
+                return D_FLAT_MAJOR;
+            case "G♭ major":
+                return G_FLAT_MAJOR;
+            case "B major":
+                return B_MAJOR;
+            case "E major":
+                return E_MAJOR;
+            case "A major":
+                return A_MAJOR;
+            case "D major":
+                return D_MAJOR;
+            case "G major":
+                return G_MAJOR;
+            case "C♯ major":
+                return C_SHARP_MAJOR;
+            case "F♯ major":
+                return F_SHARP_MAJOR;
+            case "C♭ major":
+                return C_FLAT_MAJOR;
+
+
+            case "A minor":
+                return A_MINOR;
+            case "D minor":
+                return D_MINOR;
+            case "G minor":
+                return G_MINOR;
+            case "C minor":
+                return C_MINOR;
+            case "F minor":
+                return F_MINOR;
+            case "A♯ minor":
+                return A_SHARP_MINOR;
+            case "D♯ minor":
+                return D_SHARP_MINOR;
+            case "G♯ minor":
+                return G_SHARP_MINOR;
+            case "C♯ minor":
+                return C_SHARP_MINOR;
+            case "F♯ minor":
+                return F_SHARP_MINOR;
+            case "B minor":
+                return B_MINOR;
+            case "E minor":
+                return E_MINOR;
+            case "B♭ minor":
+                return B_FLAT_MINOR;
+            case "E♭ minor":
+                return E_FLAT_MINOR;
+            case "A♭ minor":
+                return A_FLAT_MINOR;
+
+            default:
+                return C_MAJOR;
+
+        }
+
+    }
 
 }

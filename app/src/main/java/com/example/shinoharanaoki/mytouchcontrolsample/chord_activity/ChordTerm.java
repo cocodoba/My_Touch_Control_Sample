@@ -17,6 +17,7 @@ public class ChordTerm {
     private Chord chord;
     private long term;
     private int tonic;
+    private String key_string = "C major";
 
     public ChordTerm(Chord chord, long term){
         this.chord = chord;
@@ -35,6 +36,10 @@ public class ChordTerm {
         return rectf;
     }
 
+    public String getKeyString() {
+        return key_string;
+    }
+
     public void setChord(Chord chord) {
         this.chord = chord;
     }
@@ -45,5 +50,9 @@ public class ChordTerm {
 
     public void setRectf(RectF rectf) {
         this.rectf = rectf;
+    }
+
+    public void setKey_string(String key_string) {
+        this.key_string = key_string;
     }
 }

@@ -11,10 +11,42 @@
 
     <string-array name="key_array">
         <item>-No Key Select-</item>
-        <item>C</item>
+        <item>C major</item>
+        <item>F major</item>
+        <item>B♭ major</item>
+        <item>E♭ major</item>
+        <item>A♭ major</item>
+        <item>D♭ major</item>
+        <item>G♭ major</item>
+        <item>B major</item>
+        <item>E major</item>
+        <item>A major</item>
+        <item>D major</item>
+        <item>G major</item>
+        <item>C♯ major</item>
+        <item>F♯ major</item>
+        <item>C♭ major</item>
+        <item>A minor</item>
+        <item>D minor</item>
+        <item>G minor</item>
+        <item>C minor</item>
+        <item>F minor</item>
+        <item>A♯ minor</item>
+        <item>D♯ minor</item>
+        <item>G♯ minor</item>
+        <item>C♯ minor</item>
+        <item>F♯ minor</item>
+        <item>B minor</item>
+        <item>E minor</item>
+        <item>B♭ minor</item>
+        <item>E♭ minor</item>
+        <item>A♭ minor</item>
+
+
+
         <item>C♯</item>
         <item>D</item>
-        <item>D♭</item>
+        <item>DC</item>
         <item>D♯</item>
         <item>E</item>
         <item>E♭</item>

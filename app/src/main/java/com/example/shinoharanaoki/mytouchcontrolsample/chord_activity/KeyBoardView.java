@@ -127,6 +127,7 @@ public class KeyBoardView extends View implements Runnable{
     //TEST
     public int nowKey = C;
     private int[] now_key_scale;
+    public String nowKeyString;
 
     public KeyBoardView(Context context){
         super(context);
@@ -155,6 +156,8 @@ public class KeyBoardView extends View implements Runnable{
         paint_ball_number.setStyle(Paint.Style.FILL);    // (5)
 
         keyboard = new Key[keyboard_size];
+
+        nowKeyString = "C major";
 
         float radius = 50;
         float init_x = 100;
@@ -259,8 +262,9 @@ public class KeyBoardView extends View implements Runnable{
         for (int position = 0; position< keyboard_size; position++) {
             keyboard[position].is_scale_note = false;
             keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
-            //keyboard[i].indicator_on_key = Scale.getActualNoteIndicator(Scale.B_FLAT,i);//TEST
+            keyboard[position].indicator_on_key = Scale.getActualNoteIndicator(Scale.keyStringToInt(nowKeyString),keyboard[position].position_from_tonic);//TEST
             Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
+            Log.d(TAG, "setupKeyBoardScaleOfNowKey: position_from_tonic = " + keyboard[position].position_from_tonic);
         }
         for (int scale_note : now_key_scale){
             for (int position = 0; position < keyboard_size; position++) {
@@ -284,7 +288,7 @@ public class KeyBoardView extends View implements Runnable{
             paint_ball.setColor(keyboard[position].color);
             canvas.drawCircle(ball_x, ball_y, radius, paint_ball);  // (6)
 
-            //円の中に書く数字を描画する
+            //円の中に書く数字を描画する(キーのスケール番号を表示)
             float num_x = keyboard[position].cx -8; //Stringは中心ではなく左端を起点に描画されるので微調整
             float num_y = keyboard[position].cy +12;
             paint_ball_number.setTextSize(40);
@@ -296,7 +300,7 @@ public class KeyBoardView extends View implements Runnable{
                 canvas.drawText(String.valueOf(keyboard[position].position_from_tonic), num_x, num_y, paint_ball_number);
             }
 
-            //円の中に書く数字(position from root)を描画する
+            //円の中に書く数字(コードのスケール番号 position from root)を描画する
             num_x = keyboard[position].cx -8; //Stringは中心ではなく左端を起点に描画されるので微調整
             num_y = keyboard[position].cy +32;
             paint_ball_number.setTextSize(20);
@@ -308,7 +312,7 @@ public class KeyBoardView extends View implements Runnable{
             num_y = keyboard[position].cy +100;
             paint_ball_number.setTextSize(40);
             paint_ball_number.setColor(Color.BLUE);
-            canvas.drawText(keyboard[position].kana, num_x, num_y, paint_ball_number);
+            canvas.drawText(Scale.NoteIndicatorToString(keyboard[position].indicator_on_key), num_x, num_y, paint_ball_number);
         }
     }
 
@@ -330,6 +334,7 @@ public class KeyBoardView extends View implements Runnable{
             Log.d(TAG, "run: chord_root =" +chord.getRoot());
 
             nowKey = chord.getKey();
+            nowKeyString = chord_term.getKeyString();
             setupKeyBoardScaleOfNowKey(); //コードのキーに合わせてキーボード表示を変更
 
             for (int position = 0; position < keyboard_size; position++) {
