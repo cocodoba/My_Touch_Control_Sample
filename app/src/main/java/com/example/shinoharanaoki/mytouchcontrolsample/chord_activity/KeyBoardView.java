@@ -123,7 +123,7 @@ public class KeyBoardView extends View implements Runnable{
     //TEST
     private ChordTerm[] chord_sequence;
     //TEST
-    private String[] iroha = {"C","D","E","F","G","A","B"};
+    private String[] note_name = {"C","D","E","F","G","A","B"};
     //TEST
     public int nowKey = C;
     private int[] now_key_scale;
@@ -176,7 +176,7 @@ public class KeyBoardView extends View implements Runnable{
             /**上下交互に並べる*/
             if (y != init_y) { /*下の段*/
                 y = init_y;
-                kana = iroha[n];
+                kana = note_name[n];
                 n++;
             } else { /*上の段*/
                 y = upper_y;
@@ -189,7 +189,7 @@ public class KeyBoardView extends View implements Runnable{
             if(pattern_CtoE && count_align==alignment_pattern[0]){
                 /*下の段のパターンの最後*/
                 n--;
-                keyboard[position] = new Key(init_x, y, radius, color, position, iroha[n]);
+                keyboard[position] = new Key(init_x, y, radius, color, position, note_name[n]);
                 y = upper_y;
                 init_x +=x_gap/2;
                 pattern_CtoE = false;
@@ -199,7 +199,7 @@ public class KeyBoardView extends View implements Runnable{
             if(!pattern_CtoE && count_align==alignment_pattern[1]){
                 /*下の段のパターンの最後*/
                 n--;
-                keyboard[position] = new Key(init_x, y, radius, color, position, iroha[n]);
+                keyboard[position] = new Key(init_x, y, radius, color, position, note_name[n]);
                 y = upper_y;
                 init_x +=x_gap/2;
                 pattern_CtoE = true;
@@ -262,7 +262,8 @@ public class KeyBoardView extends View implements Runnable{
         for (int position = 0; position< keyboard_size; position++) {
             keyboard[position].is_scale_note = false;
             keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
-            keyboard[position].indicator_on_key = Scale.getActualNoteIndicator(Scale.keyStringToInt(nowKeyString),keyboard[position].position_from_tonic);//TEST
+            //TODO
+            //keyboard[position].indicator_on_key = Scale.getActualNoteIndicator(Scale.keyStringToInt(nowKeyString),keyboard[position].position_from_tonic);//TEST
             Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
             Log.d(TAG, "setupKeyBoardScaleOfNowKey: position_from_tonic = " + keyboard[position].position_from_tonic);
         }
@@ -312,7 +313,9 @@ public class KeyBoardView extends View implements Runnable{
             num_y = keyboard[position].cy +100;
             paint_ball_number.setTextSize(40);
             paint_ball_number.setColor(Color.BLUE);
-            canvas.drawText(Scale.NoteIndicatorToString(keyboard[position].indicator_on_key), num_x, num_y, paint_ball_number);
+            canvas.drawText(keyboard[position].note_name, num_x, num_y, paint_ball_number);
+            //TODO
+            //canvas.drawText(Scale.NoteIndicatorToString(keyboard[position].indicator_on_key), num_x, num_y, paint_ball_number);
         }
     }
 

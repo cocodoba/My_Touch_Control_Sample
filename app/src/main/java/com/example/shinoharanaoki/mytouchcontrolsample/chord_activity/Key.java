@@ -86,7 +86,7 @@ public class Key {
     public float cy;    // 図形を描画する Y 座標    // (2)
     public float radius;    // 角の丸み    // (3)
     public int color;
-    public String kana;
+    public String note_name;
 
     public static int index = 1;
 
@@ -95,7 +95,7 @@ public class Key {
         cy = y;
         radius = r;
         this.color = color;
-        kana = string;
+        note_name = string;
         position = pos;
 
         Log.d(TAG, "Balloon: " + index + "個目");
