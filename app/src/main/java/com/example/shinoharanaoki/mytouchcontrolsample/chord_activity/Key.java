@@ -71,11 +71,13 @@ public class Key {
     /*現在のキーに対応する*/
     public int position_from_tonic; //Scale._TONIC, Scale.SUPERTONIC などが入る
     public int indicator_on_key;
+    public String degree_name_on_key;
     public boolean is_scale_note = false;
     /*現在のコードTermによって変化する*/
     public int position_from_root;
     public int chord_interval; // Chord._ROOT, Chord._FLAT_SECOND などが入る
     public int chord_scale_note_name;
+    public String degree_name_on_chord;
     public boolean is_triad_note;
     public boolean is_tension_note;
     public boolean is_avoid_note;

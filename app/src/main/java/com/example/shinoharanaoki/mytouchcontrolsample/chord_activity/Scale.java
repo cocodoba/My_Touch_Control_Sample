@@ -136,14 +136,27 @@ public class Scale {
     public static int[] F_SHARP_MAJOR_D_SHARP_MINOR = {F_SHARP,G,G_SHARP,A,A_SHARP,B,C,C_SHARP,D,D_SHARP,E,F};
     public static int[] C_SHARP_MAJOR_A_SHARP_MINOR = {C_SHARP,D,D_SHARP,E,F,F_SHARP,G,G_SHARP,A,A_SHARP,B,C,};
 
+    //for key
+    public static String[] italian_degree = {"Do","♭♯","Re","♭♯","Mi","Fa","♭♯","Sol","♭♯","La","♭♯","Si"};
+    //for chord
+    public static String[] roman_degree = {"Ⅰ","♭♯","Ⅱ","♭♯","Ⅲ","Ⅳ","♭♯","Ⅴ","♭♯","Ⅵ","♭♯","Ⅶ"};
+
     public static int getKeyPositionFromTonic(int tonic, int note){
 
-        int scale_degree = IONIAN_SCALE[note] - tonic;
-        if(scale_degree<0){
-            scale_degree += OCTAVE +1;
+        int position = IONIAN_SCALE[note] - tonic;
+        if(position<0){
+            position += OCTAVE +1;
         }
+        return position;
+    }
+
+    public static String getKeyDegreeFromTonic(int position_from_tonic){
+
+        String scale_degree = italian_degree[position_from_tonic];
         return scale_degree;
     }
+
+
 
     public static int[] getScale(){ //TODO パラメータ: major.minor...
         int[] major_scale = {0,2,4,5,7,9,11};

@@ -262,6 +262,7 @@ public class KeyBoardView extends View implements Runnable{
         for (int position = 0; position< keyboard_size; position++) {
             keyboard[position].is_scale_note = false;
             keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
+            keyboard[position].degree_name_on_key = Scale.getKeyDegreeFromTonic(keyboard[position].position_from_tonic);
             //TODO
             //keyboard[position].indicator_on_key = Scale.getActualNoteIndicator(Scale.keyStringToInt(nowKeyString),keyboard[position].position_from_tonic);//TEST
             Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
@@ -290,15 +291,19 @@ public class KeyBoardView extends View implements Runnable{
             canvas.drawCircle(ball_x, ball_y, radius, paint_ball);  // (6)
 
             //円の中に書く数字を描画する(キーのスケール番号を表示)
-            float num_x = keyboard[position].cx -8; //Stringは中心ではなく左端を起点に描画されるので微調整
+            float num_x = keyboard[position].cx -25; //Stringは中心ではなく左端を起点に描画されるので微調整
             float num_y = keyboard[position].cy +12;
-            paint_ball_number.setTextSize(40);
+            paint_ball_number.setTextSize(35);
             if (keyboard[position].is_scale_note) {
                 paint_ball_number.setColor(Color.WHITE);
-                canvas.drawText(String.valueOf(keyboard[position].position_from_tonic), num_x, num_y, paint_ball_number);
+                if(keyboard[position].position_from_tonic == Scale._TONIC){
+                    paint_ball_number.setColor(Color.YELLOW);
+                    paint_ball_number.setStrokeWidth(5);
+                }
+                canvas.drawText(keyboard[position].degree_name_on_key, num_x, num_y, paint_ball_number);
             } else {
                 paint_ball_number.setColor(Color.DKGRAY);
-                canvas.drawText(String.valueOf(keyboard[position].position_from_tonic), num_x, num_y, paint_ball_number);
+                canvas.drawText(keyboard[position].degree_name_on_key, num_x, num_y, paint_ball_number);
             }
 
             //円の中に書く数字(コードのスケール番号 position from root)を描画する
