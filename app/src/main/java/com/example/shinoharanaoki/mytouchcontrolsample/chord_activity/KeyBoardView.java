@@ -278,6 +278,27 @@ public class KeyBoardView extends View implements Runnable{
         postInvalidate();
     }
 
+    //TODO
+    /*public void setupKeyBoardScaleOfNowRoot(){
+        for (int position = 0; position< keyboard_size; position++) {
+            //keyboard[position].is_avoid_note = false;
+            keyboard[position].position_from_root = chord.getPositionFromRoot(keyboard[position].absolute_note_name);
+            keyboard[position].degree_name_on_key = Scale.getKeyDegreeFromTonic(keyboard[position].position_from_tonic);
+
+            //keyboard[position].indicator_on_key = Scale.getActualNoteIndicator(Scale.keyStringToInt(nowKeyString),keyboard[position].position_from_tonic);//TEST
+            Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
+            Log.d(TAG, "setupKeyBoardScaleOfNowKey: position_from_tonic = " + keyboard[position].position_from_tonic);
+        }
+        for (int scale_note : now_key_scale){
+            for (int position = 0; position < keyboard_size; position++) {
+                if(keyboard[position].position_from_tonic == scale_note){
+                    keyboard[position].is_scale_note = true;
+                }
+            }
+        }
+        postInvalidate();
+    }*/
+
     @Override
     protected void onDraw(Canvas canvas) {
         // 円を描画する
@@ -311,7 +332,7 @@ public class KeyBoardView extends View implements Runnable{
             num_y = keyboard[position].cy +32;
             paint_ball_number.setTextSize(20);
             paint_ball_number.setColor(Color.GREEN);
-            canvas.drawText(String.valueOf(keyboard[position].position_from_root), num_x, num_y, paint_ball_number);
+            canvas.drawText(String.valueOf(keyboard[position].degree_name_on_chord), num_x, num_y, paint_ball_number);
 
             //円の下に書く文字を描画する
             num_x = keyboard[position].cx -15; //Stringは中心ではなく左端を起点に描画されるので微調整
@@ -348,33 +369,39 @@ public class KeyBoardView extends View implements Runnable{
             for (int position = 0; position < keyboard_size; position++) {
                 /**コード表示3. 現在のコードルートに応じて、キーボードにルートからのポジション番号と、文字表示用のインジケータを割り振る*/
                 keyboard[position].position_from_root = chord.getPositionFromRoot(keyboard[position].absolute_note_name);
+                Log.d(TAG, "run: positionFromRoot = " + keyboard[position].position_from_root);
+                keyboard[position].degree_name_on_chord  = Chord.getKeyDegreeFromTonic(keyboard[position].position_from_root);
                 /**コード表示4. コードにディミニッシュかオーギュメンテッドのフラグがあれば、該当する鍵盤のインジケータを変更する*/
                 //keyboard[i].setflags(chord);
             }
 
             /** コード表示5-(A). コードからコードトーンを度数の形で出力する(キーボード全体に表示するため)*/
-            int[] chord_tones = chord.getChordTriad(); //FIXME
-            //Log.d(TAG, "run: chord_intervals = " + chord_tones[0]+chord_tones[1]+chord_tones[2]);
-            /** コード表示5-(B). コードからコードトーンを確定音名の形で、高さ、転回等指定したうえで出力する(実際に鳴らすため)*/
-            int[] chord_sounds = chord.generateChordSounds(); //TODO テンションも含めて全て取得できるようにする
+            //int[] chord_tones = chord.getChordTriad(); //FIXME
+            int root = Chord._I;
+            int third_or_fourth = chord.getThirdOrFourth();
+            int fifth = chord.getFifth();
+            Log.d(TAG, "run: root = " + root + ", third or fourth = " + third_or_fourth + ", fifth = " +fifth);
+
             /** コード表示6. ルートからのポジション番号と、コードトーンの度数が一致するものを照合する(キーボード全体)*/
-            for (int chord_tone : chord_tones) {
+
+            for (int position = 0; position < keyboard_size; position++) {
+                if (keyboard[position].position_from_root == root) {
+                    keyboard[position].color = Color.RED;
+                }else if(keyboard[position].position_from_root == third_or_fourth) {
+                    keyboard[position].color = Color.parseColor("aqua");
+                }else if(keyboard[position].position_from_root == fifth) {
+                    keyboard[position].color = Color.parseColor("aqua");
+                }
+            }
+
+            /*for (int chord_tone : chord_tones) {
                 for (int position = 0; position < keyboard_size; position++) {
                     if (keyboard[position].position_from_root == chord_tone) {
-                        keyboard[position].color = Color.RED;
+                        keyboard[position].color = Color.parseColor("aqua");
                     }
                 }
-            }
-            /** コード表示7-(A). キーボードのポジション番号と、コードサウンド配列の数字が一致するものを照合して音を鳴らす*/
-            for (int chord_sound : chord_sounds) {
-                for (int position = 0; position < keyboard_size; position++) {
-                    if (keyboard[position].position == chord_sound) {
-                        keyboard[position].color = Color.YELLOW;
-                        // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
-                        soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
-                    }
-                }
-            }
+            }*/
+
 
             /** コード表示7-(B). キーボードのポジション番号と、6thノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getSixth()!=OMITTED) {
@@ -425,6 +452,19 @@ public class KeyBoardView extends View implements Runnable{
                 for (int position = 0; position < keyboard_size; position++) {
                     if (keyboard[position].position == chord.getThirteenth()) {
                         keyboard[position].color = Color.CYAN;
+                        // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
+                        soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
+                    }
+                }
+            }
+
+            /** コード表示5-(B). コードからコードトーンを、高さ、転回等指定したうえで出力する(実際に鳴らすため)*/
+            int[] chord_sounds = chord.generateChordSounds(); //TODO テンションも含めて全て取得できるようにする
+            /** コード表示7-(A). キーボードのポジション番号と、コードサウンド配列の数字が一致するものを照合して音を鳴らす*/
+            for (int chord_sound : chord_sounds) {
+                for (int position = 0; position < keyboard_size; position++) {
+                    if (keyboard[position].position == chord_sound) {
+                        keyboard[position].color = Color.YELLOW;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
                         soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
                     }

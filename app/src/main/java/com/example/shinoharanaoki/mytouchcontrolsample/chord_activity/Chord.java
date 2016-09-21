@@ -122,7 +122,6 @@ public class Chord {
     public static final int SEVENTH_SUSPENDED_FOURTH = 35;
     public static final int NINTH_SUSPENDED_FOURTH = 36;
 
-
     private int key = C;
     private int chords_hight = 3; //TODO UserSelect
 
@@ -285,18 +284,16 @@ public class Chord {
     public int getPositionFromRoot(int absolute_note){
 
         int position = absolute_note - root;
-        if(position<0){
+        while(position<0){
             position += 12;
         }
         return position;
     }
 
-    public int getRoot(){
-        return root;
-    }
+    public static String getKeyDegreeFromTonic(int position_from_root){
 
-    public String getRootString(){
-        return root_string;
+        String scale_degree = Scale.roman_degree[position_from_root];
+        return scale_degree;
     }
 
     public int getKey(){
@@ -305,10 +302,26 @@ public class Chord {
 
     public int[] getChordTriad(){
         int[] chord_triad = new int[3];
-        chord_triad[0] = root + 36; //+ offset
-        chord_triad[1] = root + third_or_fourth + 36;
-        chord_triad[2] = root + fifth + 36;
+        chord_triad[0] = root; //+ offset
+        chord_triad[1] = root + third_or_fourth;
+        chord_triad[2] = root + fifth;
         return chord_triad;
+    }
+
+    public String getRootString(){
+        return root_string;
+    }
+
+    public int getRoot(){
+        return root;
+    }
+
+    public int getThirdOrFourth(){
+        return third_or_fourth;
+    }
+
+    public int getFifth(){
+        return fifth;
     }
 
     public int getSixth(){
