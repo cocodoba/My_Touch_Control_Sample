@@ -6,12 +6,13 @@ import android.util.Log;
 /**
  * Created by shinoharanaoki on 2016/08/13.
  */
-public class Key {
-    private static final String TAG = Key.class.getSimpleName();
-    private final Key self = this;
+public class Kenban {
+    private static final String TAG = Kenban.class.getSimpleName();
+    private final Kenban self = this;
 
     /**
-     * Actual Note Names
+     * 鍵盤ごとに割り当てる実音
+     * 各鍵盤押下でこの音を再生
      * */
     public static final int C = 1;
     public static final int C_NATURAL = 2;
@@ -64,7 +65,7 @@ public class Key {
 
     public int position;
 
-    /**このオブジェクトと紐付けられた音名(不変)*/
+    /**個別の鍵盤オブジェクトと紐付けられた音名(不変)*/
     public int absolute_note_name; //FIXME finalにしたい  Note.C、 Note.G_FLAT_F_SHARP などが入る
     public int octave_hight; //FIXME finalにしたい
 
@@ -73,7 +74,7 @@ public class Key {
     public int indicator_on_key;
     public String degree_name_on_key;
     public boolean is_scale_note = false;
-    /*現在のコードTermによって変化する*/
+    /*現在のコードによって変化する*/
     public int position_from_root;
     public int chord_interval; // Chord._ROOT, Chord._FLAT_SECOND などが入る
     public int chord_scale_note_name;
@@ -86,13 +87,13 @@ public class Key {
 
     public float cx;    // 図形を描画する X 座標    // (1)
     public float cy;    // 図形を描画する Y 座標    // (2)
-    public float radius;    // 角の丸み    // (3)
+    public float radius = 50;    // 角の丸み    // (3)
     public int color;
     public String note_name;
 
     public static int index = 1;
 
-    public Key(float x, float y, float r, int color, int pos, String string){
+    public Kenban(float x, float y, float r, int color, int pos, String string){
         cx = x;
         cy = y;
         radius = r;

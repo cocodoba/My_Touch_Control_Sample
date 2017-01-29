@@ -1,4 +1,4 @@
-package com.example.shinoharanaoki.mytouchcontrolsample;
+package com.example.shinoharanaoki.mytouchcontrolsample.sample3_multi_touch;
 
 import android.content.Context;
 import android.graphics.Canvas;

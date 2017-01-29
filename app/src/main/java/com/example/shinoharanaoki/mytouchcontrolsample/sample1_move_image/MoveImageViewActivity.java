@@ -1,4 +1,4 @@
-package com.example.shinoharanaoki.mytouchcontrolsample;
+package com.example.shinoharanaoki.mytouchcontrolsample.sample1_move_image;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import com.example.shinoharanaoki.mytouchcontrolsample.R;
 
 public class MoveImageViewActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
@@ -28,7 +30,7 @@ public class MoveImageViewActivity extends AppCompatActivity implements View.OnT
 
         frameLayout01 = (FrameLayout)findViewById(R.id.FrameLayout01);
 
-        target = (ImageView)findViewById(R.id.ImageView01);
+        target = (ImageView)findViewById(R.id.ImageView01); //ターゲット ＝ ぞうさんの絵
         target.setOnTouchListener(this);
 
     }

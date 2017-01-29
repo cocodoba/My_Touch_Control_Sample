@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.shinoharanaoki.mytouchcontrolsample.MainActivity"
+    tools:context=".main_activity.MainActivity"
     android:orientation="vertical">
 
     <Button
@@ -23,27 +23,27 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ボールが3つ"
+        android:text="３つのボールを同時に動かす"
         android:onClick="onClickSample3"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="オブジェクトをぐるぐる回す"
+        android:text="タッチしてサウンドを鳴らす"
         android:onClick="onClickSample4"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ボールがぴかぴか光る"
+        android:text="マルチタッチでポインタを増やす"
         android:onClick="onClickSample5"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="コードを鳴らす"
+        android:text="マルチタッチで線を描く(予定)"
         android:onClick="onClickSample6"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TouchSampleActivity1"
+        android:text="タッチで円が膨らむ(予定)"
         android:onClick="onClickSample1"/>
 
 

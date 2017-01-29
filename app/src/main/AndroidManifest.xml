@@ -8,21 +8,23 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".main_activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MoveImageViewActivity" />
-        <activity android:name=".MoveBallObjectActivity" />
-        <activity android:name=".ThreeBallsActivity" />
+        <activity android:name=".sample1_move_image.MoveImageViewActivity" />
+        <activity android:name=".sample2_mave_a_ball.MoveBallObjectActivity" />
+        <activity android:name=".sample3_multi_touch.ThreeBallsActivity" />
         <activity android:name=".LoopingBalloonsActivity" />
-        <activity android:name=".FlashBallsActivity" />
-        <activity android:name=".chord_activity.ChordBoardActivity"
-                  android:screenOrientation="landscape"
-                  android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+        <activity android:name=".sample4_sound_on_touch.FlashBallsActivity" />
+        <activity
+            android:name=".chord_activity.ChordBoardActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
+        <activity android:name=".sample5_multi_touch_color.MultiTouchActivity"></activity>
     </application>
 
 </manifest>

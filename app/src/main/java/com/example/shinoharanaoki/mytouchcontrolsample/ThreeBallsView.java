@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.shinoharanaoki.mytouchcontrolsample.sample3_multi_touch.Ball;
+
 /**
  * Created by shinoharanaoki on 2016/08/10.
  */

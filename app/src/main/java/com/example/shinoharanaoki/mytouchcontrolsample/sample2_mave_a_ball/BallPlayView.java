@@ -1,12 +1,10 @@
-package com.example.shinoharanaoki.mytouchcontrolsample;
+package com.example.shinoharanaoki.mytouchcontrolsample.sample2_mave_a_ball;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 
 /**

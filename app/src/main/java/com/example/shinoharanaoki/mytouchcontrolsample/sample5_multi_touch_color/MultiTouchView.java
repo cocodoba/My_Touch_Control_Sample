@@ -1,11 +1,10 @@
-package com.example.shinoharanaoki.mytouchcontrolsample;
+package com.example.shinoharanaoki.mytouchcontrolsample.sample5_multi_touch_color;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -68,7 +67,7 @@ public class MultiTouchView extends View{
                 break;
             }
             case MotionEvent.ACTION_MOVE: { // a pointer was moved
-                for (int size = event.getPointerCount(), i = 0; i < size; i++) {
+                for (int size = event.getPointerCount(), i = 0; i < size; i++) { //detect which pointer is moved
                     PointF point = mActivePointers.get(event.getPointerId(i));
                     if (point != null) {
                         point.x = event.getX(i);

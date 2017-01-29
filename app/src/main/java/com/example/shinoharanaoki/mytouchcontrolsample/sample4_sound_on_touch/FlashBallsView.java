@@ -1,4 +1,4 @@
-package com.example.shinoharanaoki.mytouchcontrolsample;
+package com.example.shinoharanaoki.mytouchcontrolsample.sample4_sound_on_touch;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.shinoharanaoki.mytouchcontrolsample.R;
+import com.example.shinoharanaoki.mytouchcontrolsample.sample3_multi_touch.Ball;
 
 /**
  * Created by shinoharanaoki on 2016/08/12.

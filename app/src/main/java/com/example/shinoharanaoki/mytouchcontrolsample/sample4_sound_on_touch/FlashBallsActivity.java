@@ -1,4 +1,4 @@
-package com.example.shinoharanaoki.mytouchcontrolsample;
+package com.example.shinoharanaoki.mytouchcontrolsample.sample4_sound_on_touch;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

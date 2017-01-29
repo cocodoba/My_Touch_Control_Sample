@@ -112,7 +112,7 @@ public class ChordTermEditView extends View{
             case MotionEvent.ACTION_DOWN:    // 指をタッチした
                 /*for (int position = 0; position< chordTerms_arraylist.length; position++) {
                     if(chordTerms_arraylist[position].checkTouch(touch_x,touch_y)){
-                        Log.d(TAG, "onTouchEvent: Key[" + position + "] is touched");
+                        Log.d(TAG, "onTouchEvent: Kenban[" + position + "] is touched");
                         chordTerms_arraylist[position].color = Color.YELLOW;
                         soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
                         break;
@@ -136,7 +136,7 @@ public class ChordTermEditView extends View{
                     down_x = touch_x;
                     now_moving = true;
                     /*for (int position = 0; position< keyboard.length; position++) {
-                        Log.d(TAG, "onTouchEvent: Key[" + position + "] is moving");
+                        Log.d(TAG, "onTouchEvent: Kenban[" + position + "] is moving");
                     }*/
                 }
 

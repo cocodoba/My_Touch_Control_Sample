@@ -1,6 +1,5 @@
-package com.example.shinoharanaoki.mytouchcontrolsample;
+package com.example.shinoharanaoki.mytouchcontrolsample.sample3_multi_touch;
 
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.util.Log;
 

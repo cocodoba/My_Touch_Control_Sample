@@ -22,7 +22,7 @@ public class ChordBoardActivity extends AppCompatActivity {
     private Spinner key_select_spinner;
     private Spinner root_select_spinner;
     private Spinner chord_structure_select_spinner;
-    private EditText term_length_imput;
+    private EditText length_imput;
 
     private KeyBoardView keyboard_view;
     private ChordTermEditView chord_edit_view;
@@ -160,13 +160,12 @@ public class ChordBoardActivity extends AppCompatActivity {
                 Spinner spinner = (Spinner) parent;
                 chord_symbol = spinner.getSelectedItem().toString();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
-        term_length_imput = (EditText)findViewById(R.id.term_length_imput);
+        length_imput = (EditText)findViewById(R.id.term_length_imput);
 
         // ボタンの設定
         Button okButton;

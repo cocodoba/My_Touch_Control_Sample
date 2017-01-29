@@ -21,6 +21,7 @@ import com.example.shinoharanaoki.mytouchcontrolsample.R;
  * Created by shinoharanaoki on 2016/08/13.
  */
 public class KeyBoardView extends View implements Runnable{
+
     private static final String TAG = KeyBoardView.class.getSimpleName();
     private final KeyBoardView self = this;
 
@@ -50,7 +51,7 @@ public class KeyBoardView extends View implements Runnable{
     /**
      * Actual Note Name indicators based on selected key or chord
      * */
-    /*public static final int C = 1;
+    /**public static final int C = 1;
     public static final int C_NATURAL = 2;
     public static final int C_FLAT = 3;
     public static final int C_SHARP = 4;
@@ -97,7 +98,7 @@ public class KeyBoardView extends View implements Runnable{
     public static final int B_FLAT = 39;
     public static final int B_SHARP = 40;
     public static final int B_DOUBLE_FLAT = 41;
-    public static final int B_DOUBLE_SHARP = 42;*/
+    public static final int B_DOUBLE_SHARP = 42;**/
 
     private Context context;
 
@@ -117,7 +118,7 @@ public class KeyBoardView extends View implements Runnable{
     private Thread thread;
     boolean isThreadRunning = false;
 
-    private Key[] keyboard;
+    private Kenban[] kenban;
     private int keyboard_size = 72;
 
     //TEST
@@ -155,7 +156,7 @@ public class KeyBoardView extends View implements Runnable{
         paint_ball_number.setAntiAlias(true);
         paint_ball_number.setStyle(Paint.Style.FILL);    // (5)
 
-        keyboard = new Key[keyboard_size];
+        Kenban[] kenban = new Kenban[keyboard_size];
 
         nowKeyString = "C major";
 
@@ -183,13 +184,13 @@ public class KeyBoardView extends View implements Runnable{
                 kana = "";
             }
             init_x += x_gap/2; //間隔
-            keyboard[position] = new Key(init_x, y, radius, color, position,kana);
+            kenban[position] = new Kenban(init_x, y, radius, color, position,kana);
             count_align++;
 
             if(pattern_CtoE && count_align==alignment_pattern[0]){
                 /*下の段のパターンの最後*/
                 n--;
-                keyboard[position] = new Key(init_x, y, radius, color, position, note_name[n]);
+                kenban[position] = new Kenban(init_x, y, radius, color, position, note_name[n]);
                 y = upper_y;
                 init_x +=x_gap/2;
                 pattern_CtoE = false;
@@ -199,7 +200,7 @@ public class KeyBoardView extends View implements Runnable{
             if(!pattern_CtoE && count_align==alignment_pattern[1]){
                 /*下の段のパターンの最後*/
                 n--;
-                keyboard[position] = new Key(init_x, y, radius, color, position, note_name[n]);
+                kenban[position] = new Kenban(init_x, y, radius, color, position, note_name[n]);
                 y = upper_y;
                 init_x +=x_gap/2;
                 pattern_CtoE = true;
@@ -213,18 +214,18 @@ public class KeyBoardView extends View implements Runnable{
         int num = 0;
         int hight = 1;
         for (int position = 0; position< keyboard_size; position++) {
-            keyboard[position].absolute_note_name = num;
-            keyboard[position].octave_hight = hight;
+            kenban[position].absolute_note_name = num;
+            kenban[position].octave_hight = hight;
             if (num<OCTAVE) {
                 num++;
             }else if(num==OCTAVE){
-                keyboard[position].absolute_note_name = num;
-                keyboard[position].octave_hight = hight;
+                kenban[position].absolute_note_name = num;
+                kenban[position].octave_hight = hight;
                 num = 0;
                 hight++;
             }
-            Log.i(TAG, "initialize: baloons["+position+"] ... octave_hight= "+ keyboard[position].octave_hight + "  " +
-                    "  absolute_note_name="+ keyboard[position].absolute_note_name);
+            Log.i(TAG, "initialize: baloons["+position+"] ... octave_hight= "+ kenban[position].octave_hight + "  " +
+                    "  absolute_note_name="+ kenban[position].absolute_note_name);
         }
 
         now_key_scale = Scale.getScale(); //TODO パラメータ: major.minor...
@@ -232,7 +233,7 @@ public class KeyBoardView extends View implements Runnable{
         /*キーの初期値を指定してKeyBoardに反映*/
         setupKeyBoardScaleOfNowKey();
 
-        /**プレビュー画面でのエラー回避*/
+        /**AndroidStudioのプレビュー画面でのエラー回避*/
         if (isInEditMode()) {
             // 編集モードだったら処理終了
             return ;
@@ -260,18 +261,18 @@ public class KeyBoardView extends View implements Runnable{
 
     public void setupKeyBoardScaleOfNowKey(){
         for (int position = 0; position< keyboard_size; position++) {
-            keyboard[position].is_scale_note = false;
-            keyboard[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, keyboard[position].absolute_note_name);
-            keyboard[position].degree_name_on_key = Scale.getKeyDegreeFromTonic(keyboard[position].position_from_tonic);
+            kenban[position].is_scale_note = false;
+            kenban[position].position_from_tonic = Scale.getKeyPositionFromTonic(nowKey, kenban[position].absolute_note_name);
+            kenban[position].degree_name_on_key = Scale.getKeyDegreeFromTonic(kenban[position].position_from_tonic);
             //TODO
-            //keyboard[position].indicator_on_key = Scale.getActualNoteIndicator(Scale.keyStringToInt(nowKeyString),keyboard[position].position_from_tonic);//TEST
-            Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
-            Log.d(TAG, "setupKeyBoardScaleOfNowKey: position_from_tonic = " + keyboard[position].position_from_tonic);
+            //kenban[position].indicator_on_key = Scale.getActualNoteIndicator(Scale.keyStringToInt(nowKeyString),kenban[position].position_from_tonic);//TEST
+            Log.i(TAG, "initialize: kenban["+position+"] ...  absolute_note_name="+ kenban[position].position_from_tonic);
+            Log.d(TAG, "setupKeyBoardScaleOfNowKey: position_from_tonic = " + kenban[position].position_from_tonic);
         }
         for (int scale_note : now_key_scale){
             for (int position = 0; position < keyboard_size; position++) {
-                if(keyboard[position].position_from_tonic == scale_note){
-                    keyboard[position].is_scale_note = true;
+                if(kenban[position].position_from_tonic == scale_note){
+                    kenban[position].is_scale_note = true;
                 }
             }
         }
@@ -281,18 +282,18 @@ public class KeyBoardView extends View implements Runnable{
     //TODO
     /*public void setupKeyBoardScaleOfNowRoot(){
         for (int position = 0; position< keyboard_size; position++) {
-            //keyboard[position].is_avoid_note = false;
-            keyboard[position].position_from_root = chord.getPositionFromRoot(keyboard[position].absolute_note_name);
-            keyboard[position].degree_name_on_key = Scale.getKeyDegreeFromTonic(keyboard[position].position_from_tonic);
+            //kenban[position].is_avoid_note = false;
+            kenban[position].position_from_root = chord.getPositionFromRoot(kenban[position].absolute_note_name);
+            kenban[position].degree_name_on_key = Scale.getKeyDegreeFromTonic(kenban[position].position_from_tonic);
 
-            //keyboard[position].indicator_on_key = Scale.getActualNoteIndicator(Scale.keyStringToInt(nowKeyString),keyboard[position].position_from_tonic);//TEST
-            Log.i(TAG, "initialize: keyboard["+position+"] ...  absolute_note_name="+ keyboard[position].position_from_tonic);
-            Log.d(TAG, "setupKeyBoardScaleOfNowKey: position_from_tonic = " + keyboard[position].position_from_tonic);
+            //kenban[position].indicator_on_key = Scale.getActualNoteIndicator(Scale.keyStringToInt(nowKeyString),kenban[position].position_from_tonic);//TEST
+            Log.i(TAG, "initialize: kenban["+position+"] ...  absolute_note_name="+ kenban[position].position_from_tonic);
+            Log.d(TAG, "setupKeyBoardScaleOfNowKey: position_from_tonic = " + kenban[position].position_from_tonic);
         }
         for (int scale_note : now_key_scale){
             for (int position = 0; position < keyboard_size; position++) {
-                if(keyboard[position].position_from_tonic == scale_note){
-                    keyboard[position].is_scale_note = true;
+                if(kenban[position].position_from_tonic == scale_note){
+                    kenban[position].is_scale_note = true;
                 }
             }
         }
@@ -305,43 +306,43 @@ public class KeyBoardView extends View implements Runnable{
 
         for(int position = 0; position< keyboard_size; position++) {
 
-            float ball_x = keyboard[position].cx;
-            float ball_y = keyboard[position].cy;
-            float radius = keyboard[position].radius;
-            paint_ball.setColor(keyboard[position].color);
+            float ball_x = kenban[position].cx;
+            float ball_y = kenban[position].cy;
+            float radius = kenban[position].radius;
+            paint_ball.setColor(kenban[position].color);
             canvas.drawCircle(ball_x, ball_y, radius, paint_ball);  // (6)
 
             //円の中に書く数字を描画する(キーのスケール番号を表示)
-            float num_x = keyboard[position].cx -25; //Stringは中心ではなく左端を起点に描画されるので微調整
-            float num_y = keyboard[position].cy +12;
+            float num_x = kenban[position].cx -25; //Stringは中心ではなく左端を起点に描画されるので微調整
+            float num_y = kenban[position].cy +12;
             paint_ball_number.setTextSize(35);
-            if (keyboard[position].is_scale_note) {
+            if (kenban[position].is_scale_note) {
                 paint_ball_number.setColor(Color.WHITE);
-                if(keyboard[position].position_from_tonic == Scale._TONIC){
+                if(kenban[position].position_from_tonic == Scale._TONIC){
                     paint_ball_number.setColor(Color.YELLOW);
                     paint_ball_number.setStrokeWidth(5);
                 }
-                canvas.drawText(keyboard[position].degree_name_on_key, num_x, num_y, paint_ball_number);
+                canvas.drawText(kenban[position].degree_name_on_key, num_x, num_y, paint_ball_number);
             } else {
                 paint_ball_number.setColor(Color.DKGRAY);
-                canvas.drawText(keyboard[position].degree_name_on_key, num_x, num_y, paint_ball_number);
+                canvas.drawText(kenban[position].degree_name_on_key, num_x, num_y, paint_ball_number);
             }
 
             //円の中に書く数字(コードのスケール番号 position from root)を描画する
-            num_x = keyboard[position].cx -8; //Stringは中心ではなく左端を起点に描画されるので微調整
-            num_y = keyboard[position].cy +32;
+            num_x = kenban[position].cx -8; //Stringは中心ではなく左端を起点に描画されるので微調整
+            num_y = kenban[position].cy +32;
             paint_ball_number.setTextSize(20);
             paint_ball_number.setColor(Color.GREEN);
-            canvas.drawText(String.valueOf(keyboard[position].degree_name_on_chord), num_x, num_y, paint_ball_number);
+            canvas.drawText(String.valueOf(kenban[position].degree_name_on_chord), num_x, num_y, paint_ball_number);
 
             //円の下に書く文字を描画する
-            num_x = keyboard[position].cx -15; //Stringは中心ではなく左端を起点に描画されるので微調整
-            num_y = keyboard[position].cy +100;
+            num_x = kenban[position].cx -15; //Stringは中心ではなく左端を起点に描画されるので微調整
+            num_y = kenban[position].cy +100;
             paint_ball_number.setTextSize(40);
             paint_ball_number.setColor(Color.BLUE);
-            canvas.drawText(keyboard[position].note_name, num_x, num_y, paint_ball_number);
+            canvas.drawText(kenban[position].note_name, num_x, num_y, paint_ball_number);
             //TODO
-            //canvas.drawText(Scale.NoteIndicatorToString(keyboard[position].indicator_on_key), num_x, num_y, paint_ball_number);
+            //canvas.drawText(Scale.NoteIndicatorToString(kenban[position].indicator_on_key), num_x, num_y, paint_ball_number);
         }
     }
 
@@ -352,7 +353,7 @@ public class KeyBoardView extends View implements Runnable{
         while (isThreadRunning) {
                     /*いったんすべてのボールの色を元に戻す*/
             for (int position = 0; position < keyboard_size; position++) {
-                keyboard[position].color = Color.BLUE;
+                kenban[position].color = Color.BLUE;
             }
             postInvalidate();
 
@@ -368,11 +369,11 @@ public class KeyBoardView extends View implements Runnable{
 
             for (int position = 0; position < keyboard_size; position++) {
                 /**コード表示3. 現在のコードルートに応じて、キーボードにルートからのポジション番号と、文字表示用のインジケータを割り振る*/
-                keyboard[position].position_from_root = chord.getPositionFromRoot(keyboard[position].absolute_note_name);
-                Log.d(TAG, "run: positionFromRoot = " + keyboard[position].position_from_root);
-                keyboard[position].degree_name_on_chord  = Chord.getKeyDegreeFromTonic(keyboard[position].position_from_root);
+                kenban[position].position_from_root = chord.getPositionFromRoot(kenban[position].absolute_note_name);
+                Log.d(TAG, "run: positionFromRoot = " + kenban[position].position_from_root);
+                kenban[position].degree_name_on_chord  = Chord.getKeyDegreeFromTonic(kenban[position].position_from_root);
                 /**コード表示4. コードにディミニッシュかオーギュメンテッドのフラグがあれば、該当する鍵盤のインジケータを変更する*/
-                //keyboard[i].setflags(chord);
+                //kenban[i].setflags(chord);
             }
 
             /** コード表示5-(A). コードからコードトーンを度数の形で出力する(キーボード全体に表示するため)*/
@@ -385,19 +386,19 @@ public class KeyBoardView extends View implements Runnable{
             /** コード表示6. ルートからのポジション番号と、コードトーンの度数が一致するものを照合する(キーボード全体)*/
 
             for (int position = 0; position < keyboard_size; position++) {
-                if (keyboard[position].position_from_root == root) {
-                    keyboard[position].color = Color.RED;
-                }else if(keyboard[position].position_from_root == third_or_fourth) {
-                    keyboard[position].color = Color.parseColor("aqua");
-                }else if(keyboard[position].position_from_root == fifth) {
-                    keyboard[position].color = Color.parseColor("aqua");
+                if (kenban[position].position_from_root == root) {
+                    kenban[position].color = Color.RED;
+                }else if(kenban[position].position_from_root == third_or_fourth) {
+                    kenban[position].color = Color.parseColor("aqua");
+                }else if(kenban[position].position_from_root == fifth) {
+                    kenban[position].color = Color.parseColor("aqua");
                 }
             }
 
             /*for (int chord_tone : chord_tones) {
                 for (int position = 0; position < keyboard_size; position++) {
-                    if (keyboard[position].position_from_root == chord_tone) {
-                        keyboard[position].color = Color.parseColor("aqua");
+                    if (kenban[position].position_from_root == chord_tone) {
+                        kenban[position].color = Color.parseColor("aqua");
                     }
                 }
             }*/
@@ -406,8 +407,8 @@ public class KeyBoardView extends View implements Runnable{
             /** コード表示7-(B). キーボードのポジション番号と、6thノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getSixth()!=OMITTED) {
                 for (int position = 0; position < keyboard_size; position++) {
-                    if (keyboard[position].position == chord.getSixth()) {
-                        keyboard[position].color = Color.CYAN;
+                    if (kenban[position].position == chord.getSixth()) {
+                        kenban[position].color = Color.CYAN;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
                         soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
                     }
@@ -417,8 +418,8 @@ public class KeyBoardView extends View implements Runnable{
             /** コード表示7-(C). キーボードのポジション番号と、セブンスノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getSeventh()!=OMITTED) {
                 for (int position = 0; position < keyboard_size; position++) {
-                    if (keyboard[position].position == chord.getSeventh()) {
-                        keyboard[position].color = Color.CYAN;
+                    if (kenban[position].position == chord.getSeventh()) {
+                        kenban[position].color = Color.CYAN;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
                         soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
                     }
@@ -428,8 +429,8 @@ public class KeyBoardView extends View implements Runnable{
             /** コード表示7-(C). キーボードのポジション番号と、ナインスノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getNinth()!=OMITTED) {
                 for (int position = 0; position < keyboard_size; position++) {
-                    if (keyboard[position].position == chord.getNinth()) {
-                        keyboard[position].color = Color.GREEN;
+                    if (kenban[position].position == chord.getNinth()) {
+                        kenban[position].color = Color.GREEN;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
                         soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
                     }
@@ -439,8 +440,8 @@ public class KeyBoardView extends View implements Runnable{
             /** コード表示7-(C). キーボードのポジション番号と、イレブンスノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getEleventh()!=OMITTED) {
                 for (int position = 0; position < keyboard_size; position++) {
-                    if (keyboard[position].position == chord.getEleventh()) {
-                        keyboard[position].color = Color.CYAN;
+                    if (kenban[position].position == chord.getEleventh()) {
+                        kenban[position].color = Color.CYAN;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
                         soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
                     }
@@ -450,8 +451,8 @@ public class KeyBoardView extends View implements Runnable{
             /** コード表示7-(C). キーボードのポジション番号と、サーティーンスノートの数字が一致するものを照合して音を鳴らす*/
             if (chord.getThirteenth()!=OMITTED) {
                 for (int position = 0; position < keyboard_size; position++) {
-                    if (keyboard[position].position == chord.getThirteenth()) {
-                        keyboard[position].color = Color.CYAN;
+                    if (kenban[position].position == chord.getThirteenth()) {
+                        kenban[position].color = Color.CYAN;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
                         soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
                     }
@@ -463,15 +464,15 @@ public class KeyBoardView extends View implements Runnable{
             /** コード表示7-(A). キーボードのポジション番号と、コードサウンド配列の数字が一致するものを照合して音を鳴らす*/
             for (int chord_sound : chord_sounds) {
                 for (int position = 0; position < keyboard_size; position++) {
-                    if (keyboard[position].position == chord_sound) {
-                        keyboard[position].color = Color.YELLOW;
+                    if (kenban[position].position == chord_sound) {
+                        kenban[position].color = Color.YELLOW;
                         // play(ロードしたID, 左音量, 右音量, 優先度, ループ,再生速度)
                         soundPool.play(sounds[position], 1.0f, 1.0f, 0, 0, 1);
                     }
                 }
             }
 
-            /**画面を更新する
+            /**画面を更新する(onDraw()へ)
              *
              * UIスレッドではないほかのスレッドから画面を更新させたい場合は、
              * invalidate()ではなく、postInvalidate()を利用する
@@ -545,9 +546,9 @@ public class KeyBoardView extends View implements Runnable{
                 pressure = event.getPressure(pointer_index);
 
                 for (int i=0;i<keyboard_size;i++) {
-                    if(keyboard[i].checkTouch(touch_point)){
+                    if(kenban[i].checkTouch(touch_point)){
                         Log.d(TAG, "onTouchEvent: KeyBoard[" + i + "] is touched");
-                        keyboard[i].color = Color.YELLOW;
+                        kenban[i].color = Color.YELLOW;
                         soundPool.play(sounds[i], 1.0f, 1.0f, 0, 0, 1);
 
                         break;
@@ -570,9 +571,9 @@ public class KeyBoardView extends View implements Runnable{
                 pressure = event.getPressure(pointer_index);
 
                 for (int i=0;i<keyboard_size;i++) {
-                    if(keyboard[i].checkTouch(touch_point)){
+                    if(kenban[i].checkTouch(touch_point)){
                         Log.d(TAG, "onTouchEvent: KeyBoard[" + i + "] is touched");
-                        keyboard[i].color = Color.YELLOW;
+                        kenban[i].color = Color.YELLOW;
                         soundPool.play(sounds[i], 1.0f, 1.0f, 0, 0, 1);
 
                         now_moving = true;
@@ -591,9 +592,9 @@ public class KeyBoardView extends View implements Runnable{
                     release_point.y = event.getY(pointer_index);
 
                     for (int i=0;i<keyboard_size;i++) {
-                        if (keyboard[i].checkTouch(release_point)) {
+                        if (kenban[i].checkTouch(release_point)) {
                             Log.d(TAG, "onTouchEvent ACTION_POINTER_UP: Keyboard[" + i + "] is released");
-                            keyboard[i].color = Color.BLUE;
+                            kenban[i].color = Color.BLUE;
                         }
                     }
                 }
@@ -609,9 +610,9 @@ public class KeyBoardView extends View implements Runnable{
                     release_point.y = event.getY(pointer_index);
 
                     for (int i=0;i<keyboard_size;i++) {
-                        if (keyboard[i].checkTouch(release_point)) {
+                        if (kenban[i].checkTouch(release_point)) {
                             Log.d(TAG, "onTouchEvent ACTION_UP: Keyboard[" + i + "] is released");
-                            keyboard[i].color = Color.BLUE;
+                            kenban[i].color = Color.BLUE;
                             now_moving = false;
                         }
                     }
@@ -626,11 +627,11 @@ public class KeyBoardView extends View implements Runnable{
                 if (now_moving) {
                     if(point.x<=x_moving) {
                         for (int position=0;position<keyboard_size;position++) {
-                            keyboard[position].cx += x_moving-point.x;
+                            kenban[position].cx += x_moving-point.x;
                         }
                     }else {
                         for (int position=0;position<keyboard_size;position++) {
-                            keyboard[position].cx -= point.x-x_moving;
+                            kenban[position].cx -= point.x-x_moving;
                         }
                     }
                     point.x = x_moving;

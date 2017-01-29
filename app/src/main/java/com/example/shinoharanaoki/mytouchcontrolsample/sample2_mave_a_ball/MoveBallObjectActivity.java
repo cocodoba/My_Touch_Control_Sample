@@ -1,4 +1,4 @@
-package com.example.shinoharanaoki.mytouchcontrolsample;
+package com.example.shinoharanaoki.mytouchcontrolsample.sample2_mave_a_ball;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
